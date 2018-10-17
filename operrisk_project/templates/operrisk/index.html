@@ -5,6 +5,18 @@
         <title>Oper risk</title>
     </head>
     <body>
-        <h1>Oper risk APP</h1>
+        <h1>База операционных рисков</h1>
+        <div>            
+            {% if incidents %}
+            <h3>Список недавних инцидентов</h3>
+            <ul>
+                {% for incident in incidents %}
+                <li>{{ incident.name }}</li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <strong>Инцидентов нет</strong>
+            {% endif %}
+        </div>
     </body>
 </html>
