@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+    <head>
+        <title>Oper risk</title>
+    </head>
+    <body>
+        <h1>База операционных рисков</h1>
+        <div>            
+            {% if incident %}
+                <h3>{{ incident.name }}</h3>
+                <table>
+                    <tr>
+                        <td><strong>Категория</strong></td>                        
+                        <td><a href="/operrisk/category/{{ category.URL_name }}">{{ incident.category_id }}</a></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Дата-время инцидента</strong></td>
+                        <td>{{ incident.incident_date }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Описание инцидента</strong></td>
+                        <td>{{ incident.description }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Размер ущерба</strong></td>
+                        <td>{{ incident.loss_amount }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Предпринятые меры</strong></td>
+                        <td>{{ incident.measures_taken }}</td>
+                    </tr>                    
+                </table>                
+            {% else %}
+                <strong>Такого инцидента нет в базе</strong>
+            {% endif %}
+        </div>
+    </body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+    <head>
+        <title>Oper risk</title>
+    </head>
+    <body>
+        <h1>Добавить инцидент</h1>
+        <div>
+            <form id="incident_form" method="POST" action="/operrisk/add_incident/">
+                {% csrf_token %}
+                {% for field in form.visible_fields %}
+                    {{ field.errors }}
+                    {{ field.help_text }}
+                    {{ field }}
+                {% endfor %}
+                <input type="submit" name="submit" value="Создать инцидент"/>
+            </form>
+        </div>
+    </body>
+</html>

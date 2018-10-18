@@ -12,7 +12,7 @@ class Category(models.Model):#class for category of incident
         self.URL_name = slugify(unidecode(self.name))
         super(Category,self).save(*args, **kwargs)
 
-    class Meta:
+    class Meta:#plural form for admin interface
         verbose_name_plural = 'Categories'
 
     def __str__(self):
@@ -21,7 +21,7 @@ class Category(models.Model):#class for category of incident
 
 class Incident(models.Model):#incident class
     name = models.CharField(max_length=256,null=False)
-    caterogy_id = models.ForeignKey(Category,on_delete=models.PROTECT)
+    category_id = models.ForeignKey(Category,on_delete=models.PROTECT)
     incident_date = models.DateTimeField(null=False)
     description = models.CharField(max_length=4096,null=False)
     loss_amount = models.FloatField(default=0,blank=True,null=True)

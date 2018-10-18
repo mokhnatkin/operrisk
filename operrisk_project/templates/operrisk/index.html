@@ -11,9 +11,13 @@
             <h3>Список недавних инцидентов</h3>
             <ul>
                 {% for incident in incidents %}
-                <li>{{ incident.name }}</li>
+                <li>
+                    <a href="/operrisk/incidents/{{ incident.id }}">{{ incident.name }}</a>                    
+                </li>
                 {% endfor %}
             </ul>
+            <a href="/operrisk/all_incidents/">Все инциденты</a><br/>
+            <a href="/operrisk/add_incident/">Добавить инцидент</a>
             {% else %}
             <strong>Инцидентов нет</strong>
             {% endif %}
