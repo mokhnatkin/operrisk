@@ -1,26 +1,22 @@
-<!DOCTYPE html>
+{% extends 'operrisk/base.html' %}
 {% load staticfiles %}
-<html>
-    <head>
-        <title>Oper risk</title>
-    </head>
-    <body>
-        <h1>База операционных рисков</h1>
+
+    {% block body_block %}
         <div>            
             {% if incidents %}
             <h3>Список недавних инцидентов</h3>
             <ul>
                 {% for incident in incidents %}
                 <li>
-                    <a href="/operrisk/incidents/{{ incident.id }}">{{ incident.name }}</a>                    
+                    <a href="{% url 'show_incident' incident.id %}">{{ incident.name }}</a>                                        
                 </li>
                 {% endfor %}
             </ul>
-            <a href="/operrisk/all_incidents/">Все инциденты</a><br/>
-            <a href="/operrisk/add_incident/">Добавить инцидент</a>
+            <a href="{% url 'all_incidents' %}">Все инциденты</a>            
             {% else %}
             <strong>Инцидентов нет</strong>
             {% endif %}
+            <br/><a href="{% url 'add_incident' %}">Добавить инцидент</a>
         </div>
         <div>
             {% if categories %}
@@ -28,7 +24,7 @@
             <ul>
                 {% for cat in categories %}
                 <li>
-                    <a href="/operrisk/category/{{ cat.URL_name }}">{{ cat.name }}</a>                    
+                    <a href="{% url 'show_category' cat.URL_name %}">{{ cat.name }}</a>                                      
                 </li>
                 {% endfor %}
             </ul>
@@ -36,5 +32,4 @@
             <strong>Справочник категорий ещё не заполнен</strong>
             {% endif %}
         </div>
-    </body>
-</html>
+    {% endblock %}

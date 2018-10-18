@@ -1,11 +1,8 @@
-<!DOCTYPE html>
+{% extends 'operrisk/base.html' %}
 {% load staticfiles %}
-<html>
-    <head>
-        <title>Oper risk</title>
-    </head>
-    <body>
-        <h1>Добавить инцидент</h1>
+
+    {% block body_block %}
+        <h3>Добавить инцидент</h3>
         <div>
             <form id="incident_form" method="POST" action="/operrisk/add_incident/">
                 {% csrf_token %}
@@ -17,5 +14,4 @@
                 <input type="submit" name="submit" value="Создать инцидент"/>
             </form>
         </div>
-    </body>
-</html>
+    {% endblock %}

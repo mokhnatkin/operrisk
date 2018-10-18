@@ -1,11 +1,7 @@
-<!DOCTYPE html>
+{% extends 'operrisk/base.html' %}
 {% load staticfiles %}
-<html>
-    <head>
-        <title>Oper risk</title>
-    </head>
-    <body>
-        <h1>База операционных рисков</h1>
+
+    {% block body_block %}
         <div>            
             {% if category %}
                 <h3>{{ category.name }}</h3>
@@ -32,5 +28,4 @@
             <strong>В данной категории пока нет инцидентов</strong>
             {% endif %}
         </div>
-    </body>
-</html>
+    {% endblock %}
