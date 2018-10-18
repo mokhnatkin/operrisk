@@ -1,14 +1,15 @@
 from django.db import models
 from django.template.defaultfilters import slugify
+import unidecode
+from unidecode import unidecode
 
 # Create your models here.
 class Category(models.Model):#class for category of incident
-    name = models.CharField(max_length=256,unique=True,null=False)
-    URL_name = models.SlugField(unique=True,null=False)
-    #URL_name = models.CharField(max_length=256,unique=True,null=False,default=name)
+    name = models.CharField(max_length=256,unique=True)
+    URL_name = models.SlugField(unique=True)
 
     def save(self, *args, **kwargs):
-        self.URL_name = slugify(self.name)
+        self.URL_name = slugify(unidecode(self.name))
         super(Category,self).save(*args, **kwargs)
 
     class Meta:

@@ -23,7 +23,9 @@
             <h3>Категории опер. рисков</h3>
             <ul>
                 {% for cat in categories %}
-                <li>{{ cat.name }}</li>
+                <li>
+                    <a href="/operrisk/category/{{ cat.URL_name }}">{{ cat.name }}</a>                    
+                </li>
                 {% endfor %}
             </ul>
             {% else %}

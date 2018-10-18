@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+    <head>
+        <title>Oper risk</title>
+    </head>
+    <body>
+        <h1>База операционных рисков</h1>
+        <div>            
+            {% if category %}
+                <h3>{{ category.name }}</h3>
+            {% else %}
+                <strong>Такой категории нет в базе</strong>
+            {% endif %}
+        </div>
+        <div>
+            {% if incidents %}
+                <h3>Список инцидентов</h3>
+                <table>
+                    <tr>
+                        <th>Дата-время инцидента</th>
+                        <th>Название</th>
+                    </tr>
+                    {% for incident in incidents %}
+                    <tr>
+                        <td>{{ incident.incident_date }}</td>
+                        <td>{{ incident.name }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            {% else %}
+            <strong>В данной категории пока нет инцидентов</strong>
+            {% endif %}
+        </div>
+    </body>
+</html>
