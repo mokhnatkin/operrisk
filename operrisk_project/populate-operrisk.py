@@ -12,13 +12,22 @@ from operrisk.models import Category, Incident
 def populate():
     #create list of categories
     cats = [
-                {"name":"Внутреннее мошенничество","URL_name":"internal-fraud"},
+
+            """    {"name":"Внутреннее мошенничество","URL_name":"internal-fraud"},
                 {"name":"Внешнее мошенничество","URL_name":"external-fraud"},
                 {"name":"Клиенты, продукты и деловая практика","URL_name":"clients-products-practice"},
                 {"name":"Сбой ведения бизнеса и работы систем","URL_name":"system-failure"},
                 {"name":"Исполнение, доставка и управление процессом","URL_name":"process-management"},
                 {"name":"Производственные отношения и безопасность труда","URL_name":"labor-safety"},
-                {"name":"Стихийные бедствия и безопасность","URL_name":"natural-disasters"}
+                {"name":"Стихийные бедствия и безопасность","URL_name":"natural-disasters"} """
+
+                {"name":"Внутреннее мошенничество"},
+                {"name":"Внешнее мошенничество"},
+                {"name":"Клиенты, продукты и деловая практика"},
+                {"name":"Сбой ведения бизнеса и работы систем"},
+                {"name":"Исполнение, доставка и управление процессом"},
+                {"name":"Производственные отношения и безопасность труда"},
+                {"name":"Стихийные бедствия и безопасность"}
             ]
     for cat in cats:
         c = add_cat(cat["name"],cat["URL_name"])

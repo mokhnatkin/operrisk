@@ -18,5 +18,17 @@
             <strong>Инцидентов нет</strong>
             {% endif %}
         </div>
+        <div>
+            {% if categories %}
+            <h3>Категории опер. рисков</h3>
+            <ul>
+                {% for cat in categories %}
+                <li>{{ cat.name }}</li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <strong>Справочник категорий ещё не заполнен</strong>
+            {% endif %}
+        </div>
     </body>
 </html>
