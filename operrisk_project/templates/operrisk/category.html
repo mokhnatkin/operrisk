@@ -1,5 +1,8 @@
-{% extends 'operrisk/base.html' %}
+{% extends 'base.html' %}
 {% load staticfiles %}
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
 
     {% block body_block %}
         <div>            
@@ -12,18 +15,20 @@
         <div>
             {% if incidents %}
                 <h3>Список инцидентов</h3>
-                <table>
-                    <tr>
-                        <th>Дата-время инцидента</th>
-                        <th>Название</th>
-                    </tr>
-                    {% for incident in incidents %}
-                    <tr>
-                        <td>{{ incident.incident_date }}</td>
-                        <td><a href="/operrisk/incidents/{{ incident.id }}">{{ incident.name }}</a></td>
-                    </tr>
-                    {% endfor %}
-                </table>
+                <div class="table-responsive">                                    
+                    <table class="table">
+                        <tr>
+                            <th>Дата-время инцидента</th>
+                            <th>Название</th>
+                        </tr>
+                        {% for incident in incidents %}
+                        <tr>
+                            <td>{{ incident.incident_date }}</td>
+                            <td><a href="/operrisk/incidents/{{ incident.id }}">{{ incident.name }}</a></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
             {% else %}
             <strong>В данной категории пока нет инцидентов</strong>
             {% endif %}

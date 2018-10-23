@@ -1,32 +1,49 @@
-{% extends 'operrisk/base.html' %}
+{% extends 'base.html' %}
 {% load staticfiles %}
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
 
     {% block body_block %}
         <div>            
             {% if incident %}
                 <h3>{{ incident.name }}</h3>
-                <table>
-                    <tr>
-                        <td><strong>Категория</strong></td>                        
-                        <td><a href="/operrisk/category/{{ category.URL_name }}">{{ incident.category_id }}</a></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Дата-время инцидента</strong></td>
-                        <td>{{ incident.incident_date }}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Описание инцидента</strong></td>
-                        <td>{{ incident.description }}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Размер ущерба</strong></td>
-                        <td>{{ incident.loss_amount }}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Предпринятые меры</strong></td>
-                        <td>{{ incident.measures_taken }}</td>
-                    </tr>                    
-                </table>                
+                <div class="table-responsive">
+                    <table class="table">
+                        <tr>
+                            <td><strong>Категория</strong></td>
+                            <td><a href="{%url 'show_category' category.URL_name %}">{{ incident.category_id }}</a></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Дата инцидента</strong></td>
+                            <td>{{ incident.incident_date }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Описание инцидента</strong></td>
+                            <td>{{ incident.description }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Размер ущерба</strong></td>
+                            <td>{{ incident.loss_amount }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Предпринятые меры</strong></td>
+                            <td>{{ incident.measures_taken }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Вложенные файлы</strong></td>
+                            <td><a href="/media/{{ incident.att }}">{{ incident.att }}</a></td>
+                        </tr>
+                        <tr>
+                                <td><strong>Создано пользователем</strong></td>
+                                <td>{{ incident.created_by }}, e-mail: {{ incident.created_by.email }}</td>
+                        </tr>
+                        <tr>
+                                <td><strong>Дата-время создания записи</strong></td>
+                                <td>{{ incident.created_date }}</td>
+                        </tr>
+                    </table>
+                </div>
             {% else %}
                 <strong>Такого инцидента нет в базе</strong>
             {% endif %}

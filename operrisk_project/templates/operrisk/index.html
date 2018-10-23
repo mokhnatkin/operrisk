@@ -1,5 +1,8 @@
-{% extends 'operrisk/base.html' %}
+{% extends 'base.html' %}
 {% load staticfiles %}
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
 
     {% block body_block %}
         <div>            
@@ -12,11 +15,10 @@
                 </li>
                 {% endfor %}
             </ul>
-            <a href="{% url 'all_incidents' %}">Все инциденты</a>            
+            <a href="{% url 'all_incidents' %}">Все инциденты</a>
             {% else %}
             <strong>Инцидентов нет</strong>
-            {% endif %}
-            <br/><a href="{% url 'add_incident' %}">Добавить инцидент</a>
+            {% endif %}            
         </div>
         <div>
             {% if categories %}

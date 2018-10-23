@@ -4,10 +4,15 @@
 {% bootstrap_css %}
 {% bootstrap_javascript %}
 
-
     {% block body_block %}
         <div>
-            {% if incidents %}
+            <form action="" method="get">
+                {{ filter.form.as_p }}
+                {% bootstrap_button "Отбор" button_type="submit" button_class="btn-primary" %}                
+            </form>
+        </div>
+        <div>
+            {% if filter.qs %}
             <h3>Список всех инцидентов</h3>
             <div class="table-responsive">
                 <table class="table">
@@ -17,7 +22,7 @@
                         <th>Категория</th>
                         <th>Ущерб</th>
                     </tr>
-                    {% for incident in incidents %}
+                    {% for incident in filter.qs %}
                     <tr>
                         <td>{{ incident.incident_date }}</td>
                         <td><a href="/operrisk/incidents/{{ incident.id }}">{{ incident.name }}</a></td>
@@ -25,12 +30,10 @@
                         <td>{{ incident.loss_amount }}</td>
                     </tr>                                
                     {% endfor %}
-                </table>  
-            </div>
-          
+                </table>
+            </div>            
             {% else %}
             <strong>Инцидентов нет</strong>
             {% endif %}
         </div>
-        
     {% endblock %}

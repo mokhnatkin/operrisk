@@ -25,4 +25,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
     url(r'^operrisk/',include('operrisk.urls')),
+    url(r'^accounts/',include('registration.backends.default.urls')),    
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

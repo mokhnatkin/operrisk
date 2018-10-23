@@ -1,0 +1,13 @@
+http://54.244.206.109/moodle новая ссылка
+
+http://35.166.206.149/moodle/my/
+Admin
+RTY456rty!
+
+
+natalya - создатель курсов
+alexey - студент
+1D!jfkdfkj
+
+
+http://35.166.206.149/moodle/admin/auth_config.php?auth=ldap

@@ -1,17 +1,17 @@
-{% extends 'operrisk/base.html' %}
+{% extends 'base.html' %}
 {% load staticfiles %}
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
 
     {% block body_block %}
         <h3>Добавить инцидент</h3>
         <div>
-            <form id="incident_form" method="POST" action="/operrisk/add_incident/">
+            <form id="incident_form" method="POST" action="{% url 'add_incident' %}" enctype="multipart/form-data">
                 {% csrf_token %}
-                {% for field in form.visible_fields %}
-                    {{ field.errors }}
-                    {{ field.help_text }}
-                    {{ field }}
-                {% endfor %}
-                <input type="submit" name="submit" value="Создать инцидент"/>
+                {% bootstrap_form form%}
+                {% bootstrap_button "Создать" button_type="submit" button_class="btn-primary" %}
             </form>
         </div>
     {% endblock %}
+

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+
+<html>
+    <head>
+        <title>Oper risk</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">        
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse">                                          
+                    {% if user.is_authenticated %}
+                        <a class="navbar-brand" href="{% url 'index' %}">Домой</a>
+                        <a class="navbar-brand" href="{% url 'add_incident' %}">Добавить инцидент</a>
+                        <a class="navbar-brand" href="{% url 'all_incidents_p' %}">Все инциденты</a>
+                        <a class="navbar-brand" href="{% url 'all_incidents_f' %}">Поиск инцидента</a>
+                        <a class="navbar-brand" href="{% url 'auth_logout' %}?next=/accounts/login/">Выход</a>
+                    {% else %}
+                        <a class="navbar-brand" href="{% url 'auth_login' %}">Вход</a>
+                    {% endif %}
+                </nav>
+            </div>
+            <div class="row">                
+                    <h2>База операционных рисков</h2>
+                    {% block body_block %}
+                    {% endblock %}
+                    {% block content %}
+                    {% endblock %}                    
+            </div>
+        </div>       
+    </body>
+</html>

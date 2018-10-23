@@ -36,6 +36,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'registration',#django-registration-redux package
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -43,6 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'operrisk',
+    'bootstrap3',
+    'django_filters', 
 ]
 
 MIDDLEWARE = [
@@ -127,3 +130,10 @@ USE_TZ = True
 STATIC_URL = '/static/'
 MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL = '/media/'
+
+#settings for django-registration-redux app
+REGISTRATION_OPEN = False
+LOGIN_REDIRECT_URL = '/operrisk/'
+LOGIN_URL = '/accounts/login/'
+
+

@@ -24,9 +24,27 @@
                         <td>{{ incident.category_id }}</a></td>
                         <td>{{ incident.loss_amount }}</td>
                     </tr>                                
-                    {% endfor %}
-                </table>  
+                    {% endfor %}                    
+                </table>
             </div>
+
+            <div class="pagination">
+                    <span class="step-links">
+                        {% if incidents.has_previous %}
+                            <a href="?page=1">&laquo; Начало</a>
+                            <a href="?page={{ incidents.previous_page_number }}">назад</a>
+                        {% endif %}
+                
+                        <span class="current">
+                            Стр. {{ incidents.number }} из {{ incidents.paginator.num_pages }}
+                        </span>
+                
+                        {% if incidents.has_next %}
+                            <a href="?page={{ incidents.next_page_number }}">далее</a>
+                            <a href="?page={{ incidents.paginator.num_pages }}">конец &raquo;</a>
+                        {% endif %}
+                    </span>
+                </div>            
           
             {% else %}
             <strong>Инцидентов нет</strong>
