@@ -9,6 +9,9 @@
         <div>
             {% if incidents %}
             <h3>Список всех инцидентов</h3>
+            <a href="{% url 'export_incidents' %}">
+                {% bootstrap_button "Сохранить в excel" button_type="submit" button_class="btn-primary" %}
+            </a><br/><br/>
             <div class="table-responsive">
                 <table class="table">
                     <tr>
@@ -44,8 +47,8 @@
                             <a href="?page={{ incidents.paginator.num_pages }}">конец &raquo;</a>
                         {% endif %}
                     </span>
-                </div>            
-          
+                </div>
+
             {% else %}
             <strong>Инцидентов нет</strong>
             {% endif %}

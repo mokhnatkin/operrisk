@@ -7,6 +7,7 @@ from django.core.files.storage import FileSystemStorage
 from django.contrib.auth.decorators import login_required
 from operrisk.filters import IncidentFilter
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+import xlwt
 
 
 # Create your views here.
@@ -64,8 +65,35 @@ def show_all_incidents_p(request):#shows the list of all incidents (paginated)
 
 @login_required
 def show_all_incidents_f(request):#shows the list of all incidents and a filter to find the incident
-    f = IncidentFilter(request.GET,queryset=Incident.objects.all())    
+    f = IncidentFilter(request.GET,queryset=Incident.objects.all())
     return render(request, 'operrisk/all_incidents_f.html',{'filter':f})
+
+
+@login_required
+def export_incidents(request):#exports incidents to excel file    
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="incidents.xls"'
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('incidents')
+    row_num = 0
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+    columns = ['дата инцидента', 'название', 'категория', 'ущерб', ]
+
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+
+    # Sheet body, remaining rows
+    font_style = xlwt.XFStyle()
+    incident_list = Incident.objects.all()
+    rows = incident_list.values_list('incident_date', 'name', 'category_id', 'loss_amount')
+    for row in rows:
+        row_num += 1
+        for col_num in range(len(row)):
+            ws.write(row_num, col_num, row[col_num], font_style)
+    wb.save(response)
+    return response
+
 
 
 @login_required

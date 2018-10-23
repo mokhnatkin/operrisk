@@ -136,4 +136,3 @@ REGISTRATION_OPEN = False
 LOGIN_REDIRECT_URL = '/operrisk/'
 LOGIN_URL = '/accounts/login/'
 
-
