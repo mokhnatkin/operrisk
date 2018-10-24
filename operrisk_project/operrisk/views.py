@@ -4,10 +4,12 @@ from operrisk.models import Category, Incident
 from operrisk.forms import IncidentForm
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from operrisk.filters import IncidentFilter
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
-import xlwt
+import xlwt#write to excel
+from django.contrib.auth.models import User
+
 
 
 # Create your views here.
@@ -20,6 +22,7 @@ def index (request):#home page
 
 
 @login_required
+@permission_required('operrisk.view_category',raise_exception=True)
 def show_category(request,category_URL_name):#shows the category w/ list of incidents
     context_dict = {}
     try:
@@ -34,6 +37,7 @@ def show_category(request,category_URL_name):#shows the category w/ list of inci
 
 
 @login_required
+@permission_required('operrisk.view_incident',raise_exception=True)
 def show_incident(request,incident_id):#shows the incident
     context_dict = {}
     try:
@@ -48,6 +52,7 @@ def show_incident(request,incident_id):#shows the incident
 
 
 @login_required
+@permission_required('operrisk.view_incident',raise_exception=True)
 def show_all_incidents(request):#shows the list of all incidents
     incidents = Incident.objects.order_by('-incident_date')
     context_dict = {'incidents':incidents}
@@ -55,6 +60,7 @@ def show_all_incidents(request):#shows the list of all incidents
 
 
 @login_required
+@permission_required('operrisk.view_incident',raise_exception=True)
 def show_all_incidents_p(request):#shows the list of all incidents (paginated)
     incident_list = Incident.objects.order_by('id')
     paginator = Paginator(incident_list, 25) # number of objects per page
@@ -64,12 +70,14 @@ def show_all_incidents_p(request):#shows the list of all incidents (paginated)
 
 
 @login_required
+@permission_required('operrisk.view_incident',raise_exception=True)
 def show_all_incidents_f(request):#shows the list of all incidents and a filter to find the incident
     f = IncidentFilter(request.GET,queryset=Incident.objects.all())
     return render(request, 'operrisk/all_incidents_f.html',{'filter':f})
 
 
 @login_required
+@permission_required('operrisk.view_incident',raise_exception=True)
 def export_incidents(request):#exports incidents to excel file    
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = 'attachment; filename="incidents.xls"'
@@ -95,9 +103,9 @@ def export_incidents(request):#exports incidents to excel file
     return response
 
 
-
 @login_required
-def add_incident(request):
+@permission_required('operrisk.add_incident',raise_exception=True)
+def add_incident(request):#add a new incident
     form = IncidentForm
     if request.method == 'POST':
         form = IncidentForm(request.POST, request.FILES, request.user)
@@ -111,4 +119,11 @@ def add_incident(request):
             print(form.errors)
     return render(request,'operrisk/add_incident.html',{'form':form})
 
+
+@login_required
+@permission_required('auth.view_user',raise_exception=True)
+def list_users(request):#list of users
+    users = User.objects.all()
+    context_dict = {'users':users}
+    return render(request, 'operrisk/list_users.html',context=context_dict)    
  

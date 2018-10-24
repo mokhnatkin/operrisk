@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'operrisk',
     'bootstrap3',
-    'django_filters', 
+    'django_filters',    
 ]
 
 MIDDLEWARE = [

@@ -12,4 +12,5 @@ urlpatterns = [
     path('all_incidents_p/', views.show_all_incidents_p, name='all_incidents_p'),#list of incidents w/ pagination
     path('add_incident/',views.add_incident,name="add_incident"),#add a new incident    
     path('export_incidents/',views.export_incidents,name="export_incidents"),#exports incidents to excel file
+    path('list_users/',views.list_users,name="list_users"),#list of all users of APP    
 ]

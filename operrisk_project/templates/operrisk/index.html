@@ -5,33 +5,39 @@
 {% bootstrap_javascript %}
 
     {% block body_block %}
-        <div>            
-            {% if incidents %}
-            <h3>Список недавних инцидентов</h3>
-            <ul>
-                {% for incident in incidents %}
-                <li>
-                    <a href="{% url 'show_incident' incident.id %}">{{ incident.name }}</a>                                        
-                </li>
-                {% endfor %}
-            </ul>
-            <a href="{% url 'all_incidents' %}">Все инциденты</a>
+        <div>
+            {% if perms.operrisk.view_incident %}
+                {% if incidents %}
+                <h3>Список недавних инцидентов</h3>
+                <ul>
+                    {% for incident in incidents %}
+                    <li>
+                        <a href="{% url 'show_incident' incident.id %}">{{ incident.name }}</a>                                        
+                    </li>
+                    {% endfor %}
+                </ul>
+                <a href="{% url 'all_incidents' %}">Все инциденты</a>
+                {% else %}
+                <strong>Инцидентов нет</strong>
+                {% endif %}
             {% else %}
-            <strong>Инцидентов нет</strong>
-            {% endif %}            
+                <a href="{% url 'add_incident' %}">Добавить инцидент</a>
+            {% endif %}
         </div>
         <div>
-            {% if categories %}
-            <h3>Категории опер. рисков</h3>
-            <ul>
-                {% for cat in categories %}
-                <li>
-                    <a href="{% url 'show_category' cat.URL_name %}">{{ cat.name }}</a>                                      
-                </li>
-                {% endfor %}
-            </ul>
-            {% else %}
-            <strong>Справочник категорий ещё не заполнен</strong>
+            {% if perms.operrisk.view_category %}
+                {% if categories %}
+                <h3>Категории опер. рисков</h3>
+                <ul>
+                    {% for cat in categories %}
+                    <li>
+                        <a href="{% url 'show_category' cat.URL_name %}">{{ cat.name }}</a>                                      
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <strong>Справочник категорий ещё не заполнен</strong>
+                {% endif %}
             {% endif %}
         </div>
     {% endblock %}

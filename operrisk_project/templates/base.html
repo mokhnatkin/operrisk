@@ -14,19 +14,27 @@
         <div class="container">
             <div class="row">
                 <nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse">                                          
-                    {% if user.is_authenticated %}
-                        <a class="navbar-brand" href="{% url 'index' %}">Домой</a>
-                        <a class="navbar-brand" href="{% url 'add_incident' %}">Добавить инцидент</a>
-                        <a class="navbar-brand" href="{% url 'all_incidents_p' %}">Все инциденты</a>
-                        <a class="navbar-brand" href="{% url 'all_incidents_f' %}">Поиск инцидента</a>
-                        <a class="navbar-brand" href="{% url 'auth_logout' %}?next=/accounts/login/">Выход</a>
+                    {% if user.is_authenticated %}                        
+                            <a class="navbar-brand" href="{% url 'index' %}">Домой</a>                            
+                            {% if perms.operrisk.add_incident %}
+                                <a class="navbar-brand" href="{% url 'add_incident' %}">Добавить инцидент</a>
+                            {% endif %}
+                            {% if perms.operrisk.view_incident %}
+                                <a class="navbar-brand" href="{% url 'all_incidents_p' %}">Все инциденты</a>
+                                <a class="navbar-brand" href="{% url 'all_incidents_f' %}">Поиск инцидента</a>
+                            {% endif %}
+                            {% if perms.auth.view_user %}                            
+                                <a class="navbar-brand" href="{% url 'list_users' %}">Пользователи</a>
+                            {% endif %}
+                            <span class="navbar-brand">{{ user.username }}</span>
+                            <a class="navbar-brand" href="{% url 'auth_logout' %}?next=/accounts/login/">Выход</a>
                     {% else %}
                         <a class="navbar-brand" href="{% url 'auth_login' %}">Вход</a>
                     {% endif %}
                 </nav>
             </div>
             <div class="row">                
-                    <h2>База операционных рисков</h2>
+                    <h2>База операционных рисков СК Amanat</h2>
                     {% block body_block %}
                     {% endblock %}
                     {% block content %}
