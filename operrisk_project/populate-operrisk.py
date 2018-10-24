@@ -1,16 +1,16 @@
 # a script to populate Operrisk APP
-# the script reads a list of caterogies of incidents from xls file
-# and puts the list into DB
+# the script creates categories in DB
+# it also create groups and permissions
 
 import os
 os.environ.setdefault('DJANGO_SETTINGS_MODULE','operrisk_project.settings')
 import django
 
 django.setup()
-from operrisk.models import Category, Incident
+from operrisk.models import Category
 
 def populate():
-    #create list of categories
+    #list of categories
     cats = [
                 {"name":"Внутреннее мошенничество"},
                 {"name":"Внешнее мошенничество"},
@@ -27,6 +27,8 @@ def add_cat(name):
     c = Category.objects.get_or_create(name=name)[0]
     c.save()
     return c
+
+#def add_group(name):
 
 
 if __name__ == '__main__':
