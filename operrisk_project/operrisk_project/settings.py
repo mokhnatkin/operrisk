@@ -12,6 +12,16 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 
+def read_key(fn):#function is used to read *.key files    
+    key = None
+    try:
+        with open('keys/'+fn+'.key','r') as f:
+            key = f.readline().strip()
+    except:
+        raise IOError(fn+'.key file not found')
+    return key
+
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATE_DIR = os.path.join(BASE_DIR,'templates')
@@ -25,7 +35,7 @@ STATICFILES_DIRS = [STATIC_DIR, ]
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'kzg%$(aqmalr#*1kly**qyqkgehyb*d1x$v3%lhhz63hzd1m$h'
+SECRET_KEY = read_key('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -45,7 +55,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'operrisk',
     'bootstrap3',
-    'django_filters',    
+    'django_filters',
+    'django_python3_ldap',
 ]
 
 MIDDLEWARE = [
@@ -53,7 +64,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',    
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -136,3 +147,41 @@ REGISTRATION_OPEN = False
 LOGIN_REDIRECT_URL = '/operrisk/'
 LOGIN_URL = '/accounts/login/'
 
+#settings for django-python3-ldap
+"""
+AUTHENTICATION_BACKENDS = ('django_python3_ldap.auth.LDAPBackend',)
+
+LDAP_AUTH_URL = read_key('LDAP_AUTH_URL')
+LDAP_AUTH_SEARCH_BASE = "dc=amanat,dc=local"
+LDAP_AUTH_ACTIVE_DIRECTORY_DOMAIN = "amanat"
+LDAP_AUTH_CONNECTION_USERNAME = read_key('LDAP_AUTH_CONNECTION_USERNAME')
+LDAP_AUTH_CONNECTION_PASSWORD = read_key('LDAP_AUTH_CONNECTION_PASSWORD')
+
+LDAP_AUTH_FORMAT_USERNAME = "django_python3_ldap.utils.format_username_active_directory"
+
+LDAP_AUTH_USER_FIELDS = {
+    "username": "sAMAccountName",
+    "first_name": "givenName",
+    "last_name": "sn",
+    "email": "mail",
+}
+
+LDAP_AUTH_OBJECT_CLASS = "user"
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "loggers": {
+        "django_python3_ldap": {
+            "handlers": ["console"],
+            "level": "INFO",
+        },
+    },
+}
+
+"""
