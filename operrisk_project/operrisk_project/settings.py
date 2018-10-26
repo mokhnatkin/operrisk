@@ -165,9 +165,8 @@ LOGIN_URL = '/accounts/login/'
 #settings for django-python3-ldap
 """
 AUTHENTICATION_BACKENDS = ('django_python3_ldap.auth.LDAPBackend',)
-
 LDAP_AUTH_URL = read_key('LDAP_AUTH_URL')
-LDAP_AUTH_SEARCH_BASE = "dc=amanat,dc=local"
+LDAP_AUTH_SEARCH_BASE = "dc=amanat,dc=local" #ou=people,
 LDAP_AUTH_ACTIVE_DIRECTORY_DOMAIN = "amanat.local"
 LDAP_AUTH_CONNECTION_USERNAME = read_key('LDAP_AUTH_CONNECTION_USERNAME')
 LDAP_AUTH_CONNECTION_PASSWORD = read_key('LDAP_AUTH_CONNECTION_PASSWORD')
