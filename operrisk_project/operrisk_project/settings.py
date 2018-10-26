@@ -103,12 +103,14 @@ DATABASES = {
 }
 """
 #mySQL
+DB_USER = read_key('DB_USER')
+DB_PASSWORD = read_key('DB_PASSWORD')
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'operrisk_db',
-        'USER': 'operrisk_app',
-        'PASSWORD': 'Dji9nkid3%',
+        'USER': DB_USER,
+        'PASSWORD': DB_PASSWORD,
         'HOST': 'localhost',
         'PORT': '3306',
     }
