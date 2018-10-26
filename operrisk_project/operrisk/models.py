@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 
 
 class Category(models.Model):#class for category of incident
-    name = models.CharField(max_length=256,unique=True)
+    name = models.CharField(max_length=128,unique=True)
     URL_name = models.SlugField(unique=True)
 
     def save(self, *args, **kwargs):

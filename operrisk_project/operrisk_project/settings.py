@@ -94,10 +94,23 @@ WSGI_APPLICATION = 'operrisk_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
+"""sqLite
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
+"""
+#mySQL
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'operrisk_db',
+        'USER': 'operrisk_app',
+        'PASSWORD': 'Dji9nkid3%',
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
 
@@ -153,7 +166,7 @@ AUTHENTICATION_BACKENDS = ('django_python3_ldap.auth.LDAPBackend',)
 
 LDAP_AUTH_URL = read_key('LDAP_AUTH_URL')
 LDAP_AUTH_SEARCH_BASE = "dc=amanat,dc=local"
-LDAP_AUTH_ACTIVE_DIRECTORY_DOMAIN = "amanat"
+LDAP_AUTH_ACTIVE_DIRECTORY_DOMAIN = "amanat.local"
 LDAP_AUTH_CONNECTION_USERNAME = read_key('LDAP_AUTH_CONNECTION_USERNAME')
 LDAP_AUTH_CONNECTION_PASSWORD = read_key('LDAP_AUTH_CONNECTION_PASSWORD')
 
