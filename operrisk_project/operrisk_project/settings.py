@@ -166,25 +166,25 @@ LOGIN_URL = '/accounts/login/'
 
 AUTHENTICATION_BACKENDS = ('django_python3_ldap.auth.LDAPBackend',)
 LDAP_AUTH_URL = read_key('LDAP_AUTH_URL')#88.204.147.90
-LDAP_AUTH_SEARCH_BASE = "dc=amanat,dc=local" #ou=people,
+LDAP_AUTH_SEARCH_BASE = "dc=amanat,dc=local"
 
 LDAP_AUTH_CONNECTION_USERNAME = read_key('LDAP_AUTH_CONNECTION_USERNAME')
 LDAP_AUTH_CONNECTION_PASSWORD = read_key('LDAP_AUTH_CONNECTION_PASSWORD')
 
 LDAP_AUTH_FORMAT_USERNAME = "django_python3_ldap.utils.format_username_active_directory"
 #LDAP_AUTH_ACTIVE_DIRECTORY_DOMAIN = "amanat.local"
-LDAP_AUTH_CONNECT_TIMEOUT = 3#seconds
-LDAP_AUTH_RECEIVE_TIMEOUT = 3#seconds
+#LDAP_AUTH_CONNECT_TIMEOUT = 3#seconds
+#LDAP_AUTH_RECEIVE_TIMEOUT = 3#seconds
 
 
 LDAP_AUTH_USER_FIELDS = {
-    "username": "mail",#"sAMAccountName", #"uid"
+    "username": "mail",#"sAMAccountName"
     #"first_name": "givenName",
     #"last_name": "sn",
     "email": "mail",
 }
 
-LDAP_AUTH_OBJECT_CLASS = "user" #"inetOrgPerson"
+LDAP_AUTH_OBJECT_CLASS = "user"
 
 #the section below enables logging and prints errors to console
 LOGGING = {

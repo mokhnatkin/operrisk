@@ -3,6 +3,8 @@ from django.template.defaultfilters import slugify
 import unidecode
 from unidecode import unidecode
 from django.contrib.auth.models import User, Group
+from django.dispatch import receiver
+
 
 
 class Category(models.Model):#class for category of incident
@@ -35,6 +37,9 @@ class Incident(models.Model):#incident class
         return self.name
 
 
-
-    #g_empl = Group.objects.get(name="employees")
-    #g_empl.user_set.add(user)
+@receiver(models.signals.post_save, sender=User)#add each new user to "employees" group automatically
+def post_save_user_signal_handler(sender, instance, created, **kwargs):
+    if created:       
+       group = Group.objects.get(name='employees')
+       instance.groups.add(group)
+       instance.save()
