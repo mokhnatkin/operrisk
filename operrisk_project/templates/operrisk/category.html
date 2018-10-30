@@ -20,11 +20,15 @@
                         <tr>
                             <th>Дата-время инцидента</th>
                             <th>Название</th>
+                            <th>Ущерб</th>
+                            <th>Кем создан</th>
                         </tr>
                         {% for incident in incidents %}
                         <tr>
                             <td>{{ incident.incident_date }}</td>
                             <td><a href="/operrisk/incidents/{{ incident.id }}">{{ incident.name }}</a></td>
+                            <td>{{ incident.loss_amount }}</td>
+                            <td>{{ incident.created_by }}</td>
                         </tr>
                         {% endfor %}
                     </table>

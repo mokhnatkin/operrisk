@@ -8,7 +8,7 @@
     {% block body_block %}
         <div>
             {% if incidents %}
-            <h3>Список всех инцидентов</h3>
+            <h3>Список инцидентов, добавленных пользователем <strong>{{ current_user }}</strong></h3>
             <div class="table-responsive">
                 <table class="table">
                     <tr>

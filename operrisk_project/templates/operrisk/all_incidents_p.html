@@ -19,6 +19,7 @@
                         <th>Название</th>
                         <th>Категория</th>
                         <th>Ущерб</th>
+                        <th>Кем создан</th>
                     </tr>
                     {% for incident in incidents %}
                     <tr>
@@ -26,6 +27,7 @@
                         <td><a href="/operrisk/incidents/{{ incident.id }}">{{ incident.name }}</a></td>
                         <td>{{ incident.category_id }}</a></td>
                         <td>{{ incident.loss_amount }}</td>
+                        <td>{{ incident.created_by }}</td>
                     </tr>                                
                     {% endfor %}                    
                 </table>

@@ -53,14 +53,6 @@ def show_incident(request,incident_id):#shows the incident
 
 @login_required
 @permission_required('operrisk.view_incident',raise_exception=True)
-def show_all_incidents(request):#shows the list of all incidents
-    incidents = Incident.objects.order_by('-incident_date')
-    context_dict = {'incidents':incidents}
-    return render(request, 'operrisk/all_incidents.html',context=context_dict)
-
-
-@login_required
-@permission_required('operrisk.view_incident',raise_exception=True)
 def show_all_incidents_p(request):#shows the list of all incidents (paginated)
     incident_list = Incident.objects.order_by('id')
     paginator = Paginator(incident_list, 25) # number of objects per page
@@ -86,15 +78,12 @@ def export_incidents(request):#exports incidents to excel file
     row_num = 0
     font_style = xlwt.XFStyle()
     font_style.font.bold = True
-    columns = ['дата инцидента', 'название', 'категория', 'ущерб', ]
-
+    columns = ['дата инцидента', 'название', 'категория', 'ущерб', 'кем создан', ]
     for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], font_style)
-
-    # Sheet body, remaining rows
+        ws.write(row_num, col_num, columns[col_num], font_style)    
     font_style = xlwt.XFStyle()
     incident_list = Incident.objects.all()
-    rows = incident_list.values_list('incident_date', 'name', 'category_id', 'loss_amount')
+    rows = incident_list.values_list('incident_date', 'name', 'category_id', 'loss_amount', 'created_by')
     for row in rows:
         row_num += 1
         for col_num in range(len(row)):
@@ -125,5 +114,13 @@ def add_incident(request):#add a new incident
 def list_users(request):#list of users
     users = User.objects.all()
     context_dict = {'users':users}
-    return render(request, 'operrisk/list_users.html',context=context_dict)    
- 
+    return render(request, 'operrisk/list_users.html',context=context_dict)
+
+
+@login_required
+@permission_required('operrisk.add_incident',raise_exception=True)
+def show_my_incidents(request):#shows the list of all incidents added by current user
+    current_user = request.user
+    incidents = Incident.objects.all().filter(created_by=current_user)
+    context_dict = {'current_user':current_user,'incidents':incidents}
+    return render(request, 'operrisk/my_incidents.html',context=context_dict)
