@@ -71,8 +71,18 @@ def populate():
         g = add_group(group)
         for p in group_data["perms"]:
             add_perm(group,p["codename"],p["name"],p["content_type"])
-    
+        
     print('--groups created; permissions set')
+
+    #now assign all users to "employees" group
+    g_empl = Group.objects.get(name="employees")
+    users = User.objects.all()
+    for user in users:
+        g_empl.user_set.add(user)
+    
+    print('--all local users added to Employees group with minimum permissions')
+
+
 
 
     

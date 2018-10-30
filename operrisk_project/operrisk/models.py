@@ -2,7 +2,7 @@ from django.db import models
 from django.template.defaultfilters import slugify
 import unidecode
 from unidecode import unidecode
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 
 
 class Category(models.Model):#class for category of incident
@@ -32,4 +32,9 @@ class Incident(models.Model):#incident class
     created_date = models.DateTimeField(auto_now_add=True,null=True)
 
     def __str__(self):
-        return self.name    
+        return self.name
+
+
+
+    #g_empl = Group.objects.get(name="employees")
+    #g_empl.user_set.add(user)
