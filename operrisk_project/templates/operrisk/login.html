@@ -5,6 +5,7 @@
 
     {% block content %}
     <h2>Вход в систему</h2>
+    <h3>В качестве логина используйте свой корпоративный e-mail</h3>
     <form method="POST" action=".">
         {% csrf_token %}
         {{ form.as_p }}

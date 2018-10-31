@@ -23,8 +23,8 @@
                         <td>{{ user.username }}</td>
                         <td>{{ user.email }}</td>
                         <td>{{ user.groups.all.0.name }}</td>
-                        <td>{{ user.date_joined }}</td>
-                        <td>{{ user.last_login }}</td>
+                        <td>{{ user.date_joined |date:"d.m.Y" }}{{ user.date_joined |time:"H:i" }}</td>
+                        <td>{{ user.last_login |date:"d.m.Y" }}{{ user.last_login |time:"H:i" }}</td>
                     </tr>                                
                     {% endfor %}
                 </table>  

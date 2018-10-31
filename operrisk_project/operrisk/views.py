@@ -76,18 +76,36 @@ def export_incidents(request):#exports incidents to excel file
     wb = xlwt.Workbook(encoding='utf-8')
     ws = wb.add_sheet('incidents')
     row_num = 0
-    font_style = xlwt.XFStyle()
-    font_style.font.bold = True
-    columns = ['дата инцидента', 'название', 'категория', 'ущерб', 'кем создан', ]
+    header_style = xlwt.XFStyle()
+    header_style.font.bold = True
+    date_style = xlwt.XFStyle()
+    date_style.num_format_str='DD.MM.YYYY'#'D-MMM-YY'
+    float_style = xlwt.XFStyle()
+    float_style.num_format_str='#,##0'    
+    columns = ['дата инцидента', 'название', 'категория', 'ущерб', 'кем создан', ]      
     for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], font_style)    
-    font_style = xlwt.XFStyle()
-    incident_list = Incident.objects.all()
-    rows = incident_list.values_list('incident_date', 'name', 'category_id', 'loss_amount', 'created_by')
-    for row in rows:
+        ws.write(row_num, col_num, columns[col_num], header_style)
+    incidents = Incident.objects.all()
+    for incident in incidents:
         row_num += 1
-        for col_num in range(len(row)):
-            ws.write(row_num, col_num, row[col_num], font_style)
+        ws.write(row_num,0,incident.incident_date,date_style)
+        ws.write(row_num,1,incident.name)
+        ws.write(row_num,2,incident.category_id.name)
+        ws.write(row_num,3,incident.loss_amount,float_style)
+        ws.write(row_num,4,incident.created_by.username)
+
+    #rows = incident_list.values_list('incident_date', 'name', 'category_id', 'loss_amount', 'created_by')
+    
+    #for row in rows:
+        #row_num += 1
+        #ws.write(row_num,0,row[0],date_style)
+        #ws.write(row_num,1,row[1])
+        #ws.write(row_num,2,row[2])
+        #ws.write(row_num,3,row[3],float_style)
+        #ws.write(row_num,4,row[4])
+        #row_num += 1
+        #for col_num in range(len(row)):
+            #ws.write(row_num, col_num, row[col_num])
     wb.save(response)
     return response
 

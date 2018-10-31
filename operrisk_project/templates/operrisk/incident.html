@@ -16,7 +16,7 @@
                         </tr>
                         <tr>
                             <td><strong>Дата инцидента</strong></td>
-                            <td>{{ incident.incident_date }}</td>
+                            <td>{{ incident.incident_date |date:"d.m.Y" }}</td>
                         </tr>
                         <tr>
                             <td><strong>Описание инцидента</strong></td>
@@ -40,7 +40,7 @@
                         </tr>
                         <tr>
                             <td><strong>Дата-время создания записи</strong></td>
-                            <td>{{ incident.created_date }}</td>
+                            <td>{{ incident.created_date |date:"d.m.Y" }} {{ incident.created_date |time:"H:i" }}</td>
                         </tr>
                     </table>
                 </div>
