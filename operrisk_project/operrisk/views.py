@@ -15,7 +15,7 @@ from django.contrib.auth.models import User
 # Create your views here.
 @login_required
 def index (request):#home page
-    incidents = Incident.objects.order_by('-incident_date')[:5] #5 last incidents
+    incidents = Incident.objects.order_by('-created_date')[:5] #5 last incidents
     categories = Category.objects.order_by('name')#list of all categories
     context_dict={'incidents':incidents,'categories':categories}
     return render(request, 'operrisk/index.html',context=context_dict)
@@ -79,9 +79,9 @@ def export_incidents(request):#exports incidents to excel file
     header_style = xlwt.XFStyle()
     header_style.font.bold = True
     date_style = xlwt.XFStyle()
-    date_style.num_format_str='DD.MM.YYYY'#'D-MMM-YY'
+    date_style.num_format_str='DD.MM.YYYY'#set format for incident_date
     float_style = xlwt.XFStyle()
-    float_style.num_format_str='#,##0'    
+    float_style.num_format_str='#,##0'#set format for loss_amount
     columns = ['дата инцидента', 'название', 'категория', 'ущерб', 'кем создан', ]      
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], header_style)
@@ -93,19 +93,6 @@ def export_incidents(request):#exports incidents to excel file
         ws.write(row_num,2,incident.category_id.name)
         ws.write(row_num,3,incident.loss_amount,float_style)
         ws.write(row_num,4,incident.created_by.username)
-
-    #rows = incident_list.values_list('incident_date', 'name', 'category_id', 'loss_amount', 'created_by')
-    
-    #for row in rows:
-        #row_num += 1
-        #ws.write(row_num,0,row[0],date_style)
-        #ws.write(row_num,1,row[1])
-        #ws.write(row_num,2,row[2])
-        #ws.write(row_num,3,row[3],float_style)
-        #ws.write(row_num,4,row[4])
-        #row_num += 1
-        #for col_num in range(len(row)):
-            #ws.write(row_num, col_num, row[col_num])
     wb.save(response)
     return response
 
@@ -127,13 +114,6 @@ def add_incident(request):#add a new incident
     return render(request,'operrisk/add_incident.html',{'form':form})
 
 
-@login_required
-@permission_required('auth.view_user',raise_exception=True)
-def list_users(request):#list of users
-    users = User.objects.all()
-    context_dict = {'users':users}
-    return render(request, 'operrisk/list_users.html',context=context_dict)
-
 
 @login_required
 @permission_required('operrisk.add_incident',raise_exception=True)
@@ -142,3 +122,13 @@ def show_my_incidents(request):#shows the list of all incidents added by current
     incidents = Incident.objects.all().filter(created_by=current_user)
     context_dict = {'current_user':current_user,'incidents':incidents}
     return render(request, 'operrisk/my_incidents.html',context=context_dict)
+
+
+"""
+@login_required
+@permission_required('auth.view_user',raise_exception=True)
+def list_users(request):#list of users
+    users = User.objects.all()
+    context_dict = {'users':users}
+    return render(request, 'operrisk/list_users.html',context=context_dict)
+"""

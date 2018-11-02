@@ -4,6 +4,9 @@ import unidecode
 from unidecode import unidecode
 from django.contrib.auth.models import User, Group
 from django.dispatch import receiver
+import datetime
+from operrisk.emailing import send_email
+from django.urls import reverse
 
 
 
@@ -33,13 +36,42 @@ class Incident(models.Model):#incident class
     created_by = models.ForeignKey(User,on_delete=models.PROTECT,null=True)
     created_date = models.DateTimeField(auto_now_add=True,null=True)
 
+    def save(self, *args, **kwargs):
+        if self.loss_amount < 0:#loss_amount should not be less than 0
+            self.loss_amount = 0
+        cur_date = datetime.date.today()
+        if self.incident_date > cur_date:#incident_date should not be in a future
+            self.incident_date = cur_date
+        super(Incident,self).save(*args, **kwargs)    
+
     def __str__(self):
         return self.name
 
 
-@receiver(models.signals.post_save, sender=User)#add each new user to "employees" group automatically
+@receiver(models.signals.post_save, sender=User)#adds each new user to "employees" group automatically
 def post_save_user_signal_handler(sender, instance, created, **kwargs):
-    if created:       
-       group = Group.objects.get(name='employees')
-       instance.groups.add(group)
-       instance.save()
+    if created:
+        try:
+            group = Group.objects.get(name='employees')
+            instance.groups.add(group)
+            instance.save()
+        except:
+            quit()
+
+
+"""
+@receiver(models.signals.post_save, sender=Incident)#sends email to all risk-managers when incident is added
+def post_save_incident_signal_handler(sender, instance, created, **kwargs):
+    if created:
+        try:
+            inc_name = instance.name
+            inc_created_by = instance.created_by.username
+            inc_id = instance.id            
+            msg_subject = 'База опер.рисков - создан новый инцидент'            
+            msg_body = 'В базе опер.рисков пользователем ' + inc_created_by + ' был создан новый инцидент: ' + inc_name + '. ID инцидента: ' + inc_id
+            msg_recipient_email = 'a.mokhnatkin@a-i.kz'
+            send_email(msg_subject,msg_body,msg_recipient_email)            
+        except:
+            quit()
+
+"""
