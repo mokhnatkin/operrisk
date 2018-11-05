@@ -7,9 +7,17 @@
     {% block body_block %}
         <div>            
             {% if incident %}
-                <h3>{{ incident.name }}</h3>
+                <h3>Информация об инциденте ID {{ incident.id }}</h3>
                 <div class="table-responsive">
                     <table class="table">
+                        <tr>
+                            <td><strong>Название</strong></td>
+                            <td>{{ incident.name }}</td>
+                        </tr>                        
+                        <tr>
+                            <td><strong>Статус</strong></td>
+                            <td>{{ incident.get_status_display }}</td>
+                        </tr>
                         <tr>
                             <td><strong>Категория</strong></td>
                             <td><a href="{%url 'show_category' category.URL_name %}">{{ incident.category_id }}</a></td>

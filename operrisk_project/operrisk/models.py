@@ -25,7 +25,14 @@ class Category(models.Model):#class for category of incident
 
 
 class Incident(models.Model):#incident class
+    STATUSES = (
+        ('1', 'Черновик'),#incident.status for '1' #incident.get_status_display() for 'Черновик'
+        ('2', 'Создан'),
+        ('3', 'Утвержден'),
+        ('4', 'Помечен как ошибка'),
+    )
     name = models.CharField(max_length=256,null=False)
+    status = models.CharField(max_length=1,choices=STATUSES,blank=False,null=False,default='1')
     category_id = models.ForeignKey(Category,on_delete=models.PROTECT)
     incident_date = models.DateField(null=False)
     description = models.CharField(max_length=4096,null=False)
