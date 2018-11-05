@@ -5,13 +5,14 @@
 {% bootstrap_javascript %}
 
     {% block body_block %}
-        <h3>Добавить инцидент</h3>
+        <h3>Добавить инцидент</h3>        
         <div>
             <form id="incident_form" method="POST" action="{% url 'add_incident' %}" enctype="multipart/form-data">
                 {% csrf_token %}
                 {% bootstrap_form form%}
                 {% bootstrap_button "Создать" button_type="submit" button_class="btn-primary" %}
             </form>
-        </div>
+        </div>        
+        
     {% endblock %}
 

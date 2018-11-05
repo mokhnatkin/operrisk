@@ -1,5 +1,5 @@
 #this file contains send_email() function than connects to exchange server and sends an e-mail
-#from django.conf import settings
+
 from exchangelib import DELEGATE, Account, Credentials, Message, Mailbox, Configuration
 import os
 

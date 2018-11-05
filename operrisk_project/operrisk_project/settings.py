@@ -142,9 +142,12 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'Asia/Almaty'
 USE_I18N = True
-USE_L10N = True
+USE_L10N = False#changed to False to apply DATE_FORMAT (see below)
 USE_TZ = True
 USE_THOUSAND_SEPARATOR = True
+
+# setting for SelectDateWidget (add incident form, incident_date)
+DATE_FORMAT = 'j N, Y'
 
 
 # Static files (CSS, JavaScript, Images)

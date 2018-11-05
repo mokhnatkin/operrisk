@@ -17,6 +17,7 @@
             <div class="table-responsive">
                 <table class="table">
                     <tr>
+                        <th>ID</th>
                         <th>Дата-время инцидента</th>
                         <th>Название</th>
                         <th>Категория</th>
@@ -24,9 +25,10 @@
                     </tr>
                     {% for incident in filter.qs %}
                     <tr>
+                        <td>{{ incident.id }}</td>
                         <td>{{ incident.incident_date |date:"d.m.Y" }}</td>
                         <td><a href="/operrisk/incidents/{{ incident.id }}">{{ incident.name }}</a></td>
-                        <td>{{ incident.category_id }}</a></td>
+                        <td>{{ incident.category_id }}</td>
                         <td>{{ incident.loss_amount }}</td>
                     </tr>                                
                     {% endfor %}

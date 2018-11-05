@@ -9,6 +9,8 @@ from operrisk.filters import IncidentFilter
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 import xlwt#write to excel
 from django.contrib.auth.models import User
+#from django.contrib import messages
+#import datetime
 
 
 
@@ -103,16 +105,16 @@ def add_incident(request):#add a new incident
     form = IncidentForm
     if request.method == 'POST':
         form = IncidentForm(request.POST, request.FILES, request.user)
-        if form.is_valid():
-            instance = form.save(commit=False)           
+        if form.is_valid():            
+            instance = form.save(commit=False)
             instance.created_by = request.user
             instance.save()
             form.save(commit=True)
-            return index(request)            
+            return index(request)
+            
         else:
             print(form.errors)
     return render(request,'operrisk/add_incident.html',{'form':form})
-
 
 
 @login_required
@@ -124,11 +126,9 @@ def show_my_incidents(request):#shows the list of all incidents added by current
     return render(request, 'operrisk/my_incidents.html',context=context_dict)
 
 
-"""
 @login_required
 @permission_required('auth.view_user',raise_exception=True)
 def list_users(request):#list of users
     users = User.objects.all()
     context_dict = {'users':users}
     return render(request, 'operrisk/list_users.html',context=context_dict)
-"""
