@@ -8,9 +8,9 @@
         <h3>Добавить инцидент</h3>        
         <div>
             <form id="incident_form" method="POST" action="{% url 'add_incident' %}" enctype="multipart/form-data">
-                {% csrf_token %}
+                {% csrf_token %}                
                 {% bootstrap_form form%}
-                {% bootstrap_button "Создать" button_type="submit" button_class="btn-primary" %}
+                {% bootstrap_button "Сохранить черновик" button_type="submit" button_class="btn-info" %}                
             </form>
         </div>        
         

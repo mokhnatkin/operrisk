@@ -16,11 +16,15 @@
                         </tr>                        
                         <tr>
                             <td><strong>Статус</strong></td>
-                            <td>{{ incident.get_status_display }}</td>
+                            <td>{{ incident.get_status_display }}                                
+                                {% if incident.status == '1' %}
+                                    <a href="{% url 'edit_incident' incident.id %}"> Подтвердить и создать</a></td>
+                                {% endif %}
+                            </td>
                         </tr>
                         <tr>
                             <td><strong>Категория</strong></td>
-                            <td><a href="{%url 'show_category' category.URL_name %}">{{ incident.category_id }}</a></td>
+                            <td><a href="{% url 'show_category' category.URL_name %}">{{ incident.category_id }}</a></td>
                         </tr>
                         <tr>
                             <td><strong>Дата инцидента</strong></td>

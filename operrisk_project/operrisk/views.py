@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.http import HttpResponse
 from operrisk.models import Category, Incident
 from operrisk.forms import IncidentForm
@@ -9,8 +9,6 @@ from operrisk.filters import IncidentFilter
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 import xlwt#write to excel
 from django.contrib.auth.models import User
-#from django.contrib import messages
-#import datetime
 
 
 
@@ -40,10 +38,10 @@ def show_category(request,category_URL_name):#shows the category w/ list of inci
 
 @login_required
 @permission_required('operrisk.view_incident',raise_exception=True)
-def show_incident(request,incident_id):#shows the incident
+def show_incident(request,id):#shows the incident
     context_dict = {}
     try:
-        incident = Incident.objects.get(id=incident_id)
+        incident = Incident.objects.get(id=id)
         category = Category.objects.get(id=incident.category_id.id)
         context_dict['incident'] = incident
         context_dict['category'] = category
@@ -84,7 +82,7 @@ def export_incidents(request):#exports incidents to excel file
     date_style.num_format_str='DD.MM.YYYY'#set format for incident_date
     float_style = xlwt.XFStyle()
     float_style.num_format_str='#,##0'#set format for loss_amount
-    columns = ['дата инцидента', 'название', 'категория', 'ущерб', 'кем создан', ]      
+    columns = ['дата инцидента', 'название', 'статус', 'категория', 'ущерб', 'кем создан', ]      
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], header_style)
     incidents = Incident.objects.all()
@@ -92,30 +90,40 @@ def export_incidents(request):#exports incidents to excel file
         row_num += 1
         ws.write(row_num,0,incident.incident_date,date_style)
         ws.write(row_num,1,incident.name)
-        ws.write(row_num,2,incident.category_id.name)
-        ws.write(row_num,3,incident.loss_amount,float_style)
-        ws.write(row_num,4,incident.created_by.username)
+        ws.write(row_num,2,incident.status)
+        ws.write(row_num,3,incident.category_id.name)
+        ws.write(row_num,4,incident.loss_amount,float_style)
+        ws.write(row_num,5,incident.created_by.username)
     wb.save(response)
     return response
 
 
 @login_required
 @permission_required('operrisk.add_incident',raise_exception=True)
-def add_incident(request):#add a new incident
-    form = IncidentForm
-    if request.method == 'POST':
-        form = IncidentForm(request.POST, request.FILES, request.user)
-        if form.is_valid():            
-            instance = form.save(commit=False)
-            instance.created_by = request.user
-            instance.save()
-            form.save(commit=True)
-            return index(request)
-            
-        else:
-            print(form.errors)
-    return render(request,'operrisk/add_incident.html',{'form':form})
+def edit_incident(request, id=None,template_name = ''):#view is used to add or edit incident
+    if id:#incident already existing        
+        incident = get_object_or_404(Incident, pk=id)
+        if incident.status not in ('1',):#one can edit only incidents with status=Черновик
+            return redirect('show_incident',id=incident.id)
+        template_name='operrisk/edit_incident.html'
+    else:#new incident
+        incident = Incident(created_by=request.user) 
+        template_name='operrisk/add_incident.html'
+        
+    form = IncidentForm(request.POST or request.FILES or None, instance=incident)
 
+    if request.POST and form.is_valid():        
+        instance = form.save(commit=False)        
+        if id:#editing existing incident
+            instance.status = '2'#status=создан
+            redirected_url='show_incident'            
+        else:#adding new incident
+            instance.status = '1'#status=черновик
+            redirected_url = 'edit_incident'            
+        form.save()
+        return redirect(redirected_url,id=instance.id)
+
+    return render(request, template_name, {'form': form})
 
 @login_required
 @permission_required('operrisk.add_incident',raise_exception=True)
