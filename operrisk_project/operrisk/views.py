@@ -98,14 +98,14 @@ def export_incidents(request):#exports incidents to excel file
     return response
 
 
-def send_email_incident_added(inc_id,inc_name,inc_created_by):#function sends email to all RMs when icident with given id is created      
+def send_email_incident_added(inc_id,inc_name,inc_created_by,inc_url):#function sends email to all RMs when icident with given id is created      
     msg_subject = 'База опер.рисков - создан новый инцидент, ID ' + inc_id    
-    msg_body = 'В базе опер.рисков пользователем ' + inc_created_by + ' был создан новый инцидент: ' + inc_name + '. ID инцидента: ' + inc_id
+    msg_body = 'В базе опер.рисков пользователем ' + inc_created_by + ' был создан новый инцидент: ' + inc_name + '. ID инцидента: ' + inc_id + '. Детали: ' + inc_url
     RMS = User.objects.filter(groups__name='risk-managers')
     for RM in RMS:#send email to each user in 'risk-managers' group
         send_email(msg_subject,msg_body,RM.username)
 
-    
+
 
 
 @login_required
@@ -130,8 +130,9 @@ def edit_incident(request, id=None,template_name = ''):#view is used to add or e
             inc_id = str(instance.id)
             inc_name = str(instance.name)
             inc_created_by = str(instance.created_by.username)
+            inc_url = request.build_absolute_uri(reverse('show_incident', args=(instance.id, )))
             try:
-                send_email_incident_added(inc_id,inc_name,inc_created_by)#send email to all RMs
+                send_email_incident_added(inc_id,inc_name,inc_created_by,inc_url)#send email to all RMs
             except:
                 pass
         else:#adding new incident
