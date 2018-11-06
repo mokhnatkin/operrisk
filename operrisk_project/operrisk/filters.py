@@ -1,12 +1,15 @@
-from operrisk.models import Incident
+from operrisk.models import Incident, Category
 import django_filters
+from django_filters import DateFromToRangeFilter, DateFilter, CharFilter, NumberFilter, ModelChoiceFilter, ChoiceFilter
+
 
 class IncidentFilter(django_filters.FilterSet):    
-    name = django_filters.CharFilter(lookup_expr='icontains')    
-    loss_amount__gt = django_filters.NumberFilter(field_name='loss_amount',lookup_expr='gt')
-    loss_amount__lt = django_filters.NumberFilter(field_name='loss_amount',lookup_expr='lt')    
-    incident_year = django_filters.NumberFilter(field_name='incident_date',lookup_expr='year')
+    name = CharFilter(lookup_expr='icontains',label='Название')
+    category_id = ModelChoiceFilter(queryset=Category.objects.all(), label='Категория')
+    loss_amount__gt = NumberFilter(field_name='loss_amount',lookup_expr='gt',label='Убыток больше чем...')
+    loss_amount__lt = NumberFilter(field_name='loss_amount',lookup_expr='lt',label='Убыток меньше чем...')    
+    incident_year = NumberFilter(field_name='incident_date',lookup_expr='year',label='Год инцидента')
     
     class Meta:
         model = Incident
-        fields = ['id','name','category_id']
+        fields = ['id','status','name','category_id']

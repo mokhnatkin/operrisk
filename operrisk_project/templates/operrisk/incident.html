@@ -16,11 +16,7 @@
                         </tr>                        
                         <tr>
                             <td><strong>Статус</strong></td>
-                            <td>{{ incident.get_status_display }}                                
-                                {% if incident.status == '1' %}
-                                    <a href="{% url 'edit_incident' incident.id %}"> Подтвердить и создать</a></td>
-                                {% endif %}
-                            </td>
+                            <td>{{ incident.get_status_display }}</td>
                         </tr>
                         <tr>
                             <td><strong>Категория</strong></td>
@@ -56,6 +52,13 @@
                         </tr>
                     </table>
                 </div>
+                {% if incident.status == '1' %}            
+                    <a href="{% url 'edit_incident' incident.id %}"> {% bootstrap_button "Подтвердить и создать" button_type="submit" button_class="btn-primary" %}</a></td>
+                {% endif %}
+                {% if incident.status == '2' %}            
+                    <a href="{% url 'approve_incident' incident.id %}"> {% bootstrap_button "Утвердить" button_type="submit" button_class="btn-success" %}</a></td>
+                    <a href="{% url 'cancel_incident' incident.id %}"> {% bootstrap_button "Ошибка" button_type="submit" button_class="btn-danger" %}</a></td>
+                {% endif %}                
             {% else %}
                 <strong>Такого инцидента нет в базе</strong>
             {% endif %}

@@ -52,12 +52,17 @@ def populate():
     perm_add_category = {"codename": "add_category",
             "name" : "Can add category",
             "content_type": ContentType.objects.get_for_model(Category)
-        }        
+        }
+
+    perm_approve_incident = {"codename": "approve_incident",
+            "name" : "Can approve incident",
+            "content_type": ContentType.objects.get_for_model(Incident)
+        }
 
     #set of permissions for each group
     auditor_perms = [ perm_view_incident, perm_view_category, perm_view_user ]
     employee_perms = [ perm_add_incident ]
-    risk_manager_perms = [ perm_view_user, perm_add_category, perm_view_category, perm_add_incident, perm_view_incident ]
+    risk_manager_perms = [ perm_view_user, perm_add_category, perm_view_category, perm_add_incident, perm_view_incident, perm_approve_incident ]
 
     #groups and corresponding permissions 
     groups = {

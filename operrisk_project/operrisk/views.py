@@ -140,3 +140,35 @@ def list_users(request):#list of users
     users = User.objects.all()
     context_dict = {'users':users}
     return render(request, 'operrisk/list_users.html',context=context_dict)
+
+
+@login_required
+@permission_required('operrisk.approve_incident',raise_exception=True)
+def approve_incident(request,id=None):#approve incident
+    if id:
+        incident = get_object_or_404(Incident, pk=id)
+        if incident.status == '2':
+            incident.status = '3'#status=Утвержден
+            incident.save()
+            response = HttpResponse()#redirect to show_incident
+        else:
+            return redirect('show_incident',id=id)
+    else:
+        return redirect('show_incident',id=id)
+    return redirect('show_incident',id=id)
+
+
+@login_required
+@permission_required('operrisk.approve_incident',raise_exception=True)
+def cancel_incident(request,id=None):#cancel incident
+    if id:
+        incident = get_object_or_404(Incident, pk=id)
+        if incident.status == '2':
+            incident.status = '4'#status=Ошибка
+            incident.save()
+            response = HttpResponse()#redirect to show_incident
+        else:
+            return redirect('show_incident',id=id)
+    else:
+        return redirect('show_incident',id=id)
+    return redirect('show_incident',id=id)
