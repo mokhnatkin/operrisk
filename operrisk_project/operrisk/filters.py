@@ -3,7 +3,7 @@ import django_filters
 from django_filters import DateFromToRangeFilter, DateFilter, CharFilter, NumberFilter, ModelChoiceFilter, ChoiceFilter
 
 
-class IncidentFilter(django_filters.FilterSet):    
+class IncidentFilter(django_filters.FilterSet):
     name = CharFilter(lookup_expr='icontains',label='Название')
     category_id = ModelChoiceFilter(queryset=Category.objects.all(), label='Категория')
     loss_amount__gt = NumberFilter(field_name='loss_amount',lookup_expr='gt',label='Убыток больше чем...')

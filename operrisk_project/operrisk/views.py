@@ -9,7 +9,7 @@ from operrisk.filters import IncidentFilter
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 import xlwt#write to excel
 from django.contrib.auth.models import User
-
+from operrisk.emailing import send_email
 
 
 # Create your views here.
@@ -98,6 +98,16 @@ def export_incidents(request):#exports incidents to excel file
     return response
 
 
+def send_email_incident_added(inc_id,inc_name,inc_created_by):#function sends email to all RMs when icident with given id is created      
+    msg_subject = 'База опер.рисков - создан новый инцидент, ID ' + inc_id    
+    msg_body = 'В базе опер.рисков пользователем ' + inc_created_by + ' был создан новый инцидент: ' + inc_name + '. ID инцидента: ' + inc_id
+    RMS = User.objects.filter(groups__name='risk-managers')
+    for RM in RMS:#send email to each user in 'risk-managers' group
+        send_email(msg_subject,msg_body,RM.username)
+
+    
+
+
 @login_required
 @permission_required('operrisk.add_incident',raise_exception=True)
 def edit_incident(request, id=None,template_name = ''):#view is used to add or edit incident
@@ -116,7 +126,14 @@ def edit_incident(request, id=None,template_name = ''):#view is used to add or e
         instance = form.save(commit=False)        
         if id:#editing existing incident
             instance.status = '2'#status=создан
-            redirected_url='show_incident'            
+            redirected_url='show_incident'
+            inc_id = str(instance.id)
+            inc_name = str(instance.name)
+            inc_created_by = str(instance.created_by.username)
+            try:
+                send_email_incident_added(inc_id,inc_name,inc_created_by)#send email to all RMs
+            except:
+                pass
         else:#adding new incident
             instance.status = '1'#status=черновик
             redirected_url = 'edit_incident'            
