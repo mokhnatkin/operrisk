@@ -106,12 +106,10 @@ def send_email_incident_added(inc_id,inc_name,inc_created_by,inc_url):#function 
         send_email(msg_subject,msg_body,RM.username)
 
 
-
-
 @login_required
 @permission_required('operrisk.add_incident',raise_exception=True)
 def edit_incident(request, id=None,template_name = ''):#view is used to add or edit incident
-    if id:#incident already existing        
+    if id:#incident already existing
         incident = get_object_or_404(Incident, pk=id)
         if incident.status not in ('1',):#one can edit only incidents with status=Черновик
             return redirect('show_incident',id=incident.id)

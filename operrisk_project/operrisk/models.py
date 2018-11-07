@@ -22,6 +22,22 @@ class Category(models.Model):#class for category of incident
         return self.name
 
 
+class Subcategory(models.Model):#class for subcategory of incident
+    name = models.CharField(max_length=128,null=False)
+    URL_name = models.SlugField()
+    category = models.ForeignKey(Category,on_delete=models.PROTECT)
+
+    def save(self, *args, **kwargs):
+        self.URL_name = slugify(unidecode(self.name)) #slugify URL address (converts to eng letters, removes spaces)
+        super(Subcategory,self).save(*args, **kwargs)
+
+    class Meta:#plural form for admin interface
+        verbose_name_plural = 'Subcategories'
+
+    def __str__(self):
+        return self.name        
+
+
 
 class Incident(models.Model):#incident class
     STATUSES = (
@@ -31,9 +47,12 @@ class Incident(models.Model):#incident class
             ('4', 'Помечен как ошибка'),
         )
 
+    #sc = Subcategory.objects.get_or_create(name="Внутр. мошен. подкатегория 1")[0]        
+
     name = models.CharField(max_length=256,null=False)
     status = models.CharField(max_length=1,choices=STATUSES,blank=False,null=False,default='1')
     category_id = models.ForeignKey(Category,on_delete=models.PROTECT)
+    subcategory = models.ForeignKey(Subcategory,on_delete=models.PROTECT)
     incident_date = models.DateField(null=False,default=datetime.date.today())
     description = models.CharField(max_length=4096,null=False)
     loss_amount = models.FloatField(default=0,blank=True,null=True)

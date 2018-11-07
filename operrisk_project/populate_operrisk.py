@@ -7,14 +7,14 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE','operrisk_project.settings')
 import django
 
 django.setup()
-from operrisk.models import Category, Incident
+from operrisk.models import Category, Subcategory, Incident
 from django.contrib.auth.models import Group, Permission, User
 from django.contrib.contenttypes.models import ContentType
 
 
 
 def populate():
-    #list of categories
+    #list of categories    
     cats = [
                 {"name":"Внутреннее мошенничество"},
                 {"name":"Внешнее мошенничество"},
@@ -24,9 +24,60 @@ def populate():
                 {"name":"Производственные отношения и безопасность труда"},
                 {"name":"Стихийные бедствия и безопасность"}
             ]
+
     for cat in cats:
         c = add_cat(cat["name"])
     print("--categories created")
+
+    #list of subcategories
+    subcats = [    
+                {"name" : "Внутр. мошен. подкатегория 1",
+                        "category": Category.objects.get_or_create(name="Внутреннее мошенничество")[0]
+                },                
+                {"name" : "Внутр. мошен. подкатегория 2",
+                        "category": Category.objects.get_or_create(name="Внутреннее мошенничество")[0]
+                },
+                {"name" : "Внеш. мошен. подкатегория 1",
+                        "category": Category.objects.get_or_create(name="Внешнее мошенничество")[0]
+                },                
+                {"name" : "Внеш. мошен. подкатегория 2",
+                        "category": Category.objects.get_or_create(name="Внешнее мошенничество")[0]
+                },
+                {"name" : "Клиенты, продукты подкатегория 1",
+                        "category": Category.objects.get_or_create(name="Клиенты, продукты и деловая практика")[0]
+                },                
+                {"name" : "Клиенты, продукты подкатегория 2",
+                        "category": Category.objects.get_or_create(name="Клиенты, продукты и деловая практика")[0]
+                },
+                {"name" : "Сбой ведения бизнеса подкатегория 1",
+                        "category": Category.objects.get_or_create(name="Сбой ведения бизнеса и работы систем")[0]
+                },                
+                {"name" : "Сбой ведения бизнеса подкатегория 2",
+                        "category": Category.objects.get_or_create(name="Сбой ведения бизнеса и работы систем")[0]
+                },
+                {"name" : "Управление процессом подкатегория 1",
+                        "category": Category.objects.get_or_create(name="Исполнение, доставка и управление процессом")[0]
+                },                
+                {"name" : "Управление процессом подкатегория 2",
+                        "category": Category.objects.get_or_create(name="Исполнение, доставка и управление процессом")[0]
+                },
+                {"name" : "Производственные отношения подкатегория 1",
+                        "category": Category.objects.get_or_create(name="Производственные отношения и безопасность труда")[0]
+                },                
+                {"name" : "Производственные отношения подкатегория 2",
+                        "category": Category.objects.get_or_create(name="Производственные отношения и безопасность труда")[0]
+                },
+                {"name" : "Стихийные бедствия подкатегория 1",
+                        "category": Category.objects.get_or_create(name="Стихийные бедствия и безопасность")[0]
+                },                
+                {"name" : "Стихийные бедствия подкатегория 2",
+                        "category": Category.objects.get_or_create(name="Стихийные бедствия и безопасность")[0]
+                }
+            ]
+
+    for subcat in subcats:
+        sc = add_subcat(subcat["name"],subcat["category"])
+    print("--subcategories created")    
     
     #below is the list of all permissions needed
     perm_view_incident = {"codename": "view_incident",
@@ -95,6 +146,11 @@ def add_cat(name):#creates category
     c = Category.objects.get_or_create(name=name)[0]
     c.save()
     return c
+
+def add_subcat(name,category):#creates category
+    sc = Subcategory.objects.get_or_create(name=name,category=category)[0]
+    sc.save()
+    return sc
 
 def add_group(name):#creates group
     g = Group.objects.get_or_create(name=name)[0]
