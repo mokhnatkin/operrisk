@@ -27,7 +27,7 @@ def show_category(request,category_URL_name):#shows the category w/ list of inci
     context_dict = {}
     try:
         category = Category.objects.get(URL_name=category_URL_name)
-        incidents = Incident.objects.filter(category_id=category)
+        incidents = Incident.objects.filter(category=category)
         context_dict['incidents'] = incidents
         context_dict['category'] = category
     except Category.DoesNotExist:
@@ -42,7 +42,7 @@ def show_incident(request,id):#shows the incident
     context_dict = {}
     try:
         incident = Incident.objects.get(id=id)
-        category = Category.objects.get(id=incident.category_id.id)
+        category = Category.objects.get(id=incident.category.id)
         context_dict['incident'] = incident
         context_dict['category'] = category
     except Incident.DoesNotExist:
@@ -91,7 +91,7 @@ def export_incidents(request):#exports incidents to excel file
         ws.write(row_num,0,incident.incident_date,date_style)
         ws.write(row_num,1,incident.name)
         ws.write(row_num,2,incident.status)
-        ws.write(row_num,3,incident.category_id.name)
+        ws.write(row_num,3,incident.category.name)
         ws.write(row_num,4,incident.loss_amount,float_style)
         ws.write(row_num,5,incident.created_by.username)
     wb.save(response)

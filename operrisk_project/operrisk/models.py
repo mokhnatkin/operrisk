@@ -51,7 +51,7 @@ class Incident(models.Model):#incident class
 
     name = models.CharField(max_length=256,null=False)
     status = models.CharField(max_length=1,choices=STATUSES,blank=False,null=False,default='1')
-    category_id = models.ForeignKey(Category,on_delete=models.PROTECT)
+    category = models.ForeignKey(Category,on_delete=models.PROTECT)
     subcategory = models.ForeignKey(Subcategory,on_delete=models.PROTECT)
     incident_date = models.DateField(null=False,default=datetime.date.today())
     description = models.CharField(max_length=4096,null=False)

@@ -14,8 +14,8 @@ def add_cat(name):#creates category (helpier function)
     c.save()
     return c
 
-def add_inc(name,loss_amount,incident_date,category_id,description,measures_taken):#creates incident (helpier function)
-    inc = Incident.objects.get_or_create(name=name,loss_amount=loss_amount,incident_date=incident_date,category_id=category_id,description=description,measures_taken=measures_taken)
+def add_inc(name,loss_amount,incident_date,category,description,measures_taken):#creates incident (helpier function)
+    inc = Incident.objects.get_or_create(name=name,loss_amount=loss_amount,incident_date=incident_date,category=category,description=description,measures_taken=measures_taken)
     inc.save()
     return inc
 #########################################################################################################
@@ -32,7 +32,7 @@ class IncidentTests(TestCase):
         cur_date = datetime.date.today()
         cat = Category(name='Test category 2')
         cat.save()        
-        inc = Incident(name='test',loss_amount=-10,incident_date=cur_date,category_id=cat,description='test desc',measures_taken='test measures')
+        inc = Incident(name='test',loss_amount=-10,incident_date=cur_date,category=cat,description='test desc',measures_taken='test measures')
         inc.save()        
         self.assertEqual((inc.loss_amount >=0), True)
 
@@ -41,7 +41,7 @@ class IncidentTests(TestCase):
         incident_date = cur_date + datetime.timedelta(days=10)
         cat = Category(name='Test category 2')
         cat.save()
-        inc = Incident(name='test',loss_amount=0,incident_date=incident_date,category_id=cat,description='test desc',measures_taken='test measures')
+        inc = Incident(name='test',loss_amount=0,incident_date=incident_date,category=cat,description='test desc',measures_taken='test measures')
         inc.save()        
         self.assertEqual((inc.incident_date > cur_date),False)
 

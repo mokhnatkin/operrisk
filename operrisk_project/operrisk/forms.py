@@ -17,7 +17,7 @@ class IncidentForm(forms.ModelForm):#the form to create an incident
     empty_subcategories = Subcategory.objects.none()
     
     name = forms.CharField(max_length=256,help_text="Укажите название инцидента",label="Название")
-    category_id = forms.ModelChoiceField(queryset=categories,help_text="Выберите категорию, к которой относится инцидент",label="Категория")
+    category = forms.ModelChoiceField(queryset=categories,help_text="Выберите категорию, к которой относится инцидент",label="Категория")
     subcategory = forms.ModelChoiceField(queryset=subcategories,help_text="Выберите подкатегорию, к которой относится инцидент",label="Подкатегория")
     incident_date = forms.DateField(initial=datetime.date.today(),widget=forms.SelectDateWidget(years=year_range, months=MONTHS),help_text="Укажите, когда произошел инцидент",label="Дата инцидента")         
     description = forms.CharField(max_length=4096,help_text="Подробно опишите инцидент",widget=forms.Textarea,label="Описание инцидента")
@@ -27,7 +27,7 @@ class IncidentForm(forms.ModelForm):#the form to create an incident
 
     class Meta:
         model = Incident
-        fields = ('name','category_id','subcategory','incident_date','description','loss_amount','measures_taken','att')
+        fields = ('name','category','subcategory','incident_date','description','loss_amount','measures_taken','att')
     
     def __init__(self, *args, **kwargs):
         super(IncidentForm, self).__init__(*args, **kwargs)
@@ -49,7 +49,7 @@ class IncidentForm(forms.ModelForm):#the form to create an incident
 
     def clean_subcategory(self):
         data = self.cleaned_data['subcategory']
-        cat = self.cleaned_data['category_id']
+        cat = self.cleaned_data['category']
         if data.category.id != cat.id:#subcategory should belong to the category selected
             raise forms.ValidationError("Выберите подкатегорию корректно. Подкатегория должна относиться к выбранной категории!")
         return data        

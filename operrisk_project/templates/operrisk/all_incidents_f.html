@@ -29,7 +29,7 @@
                         <td>{{ incident.id }}</td>
                         <td>{{ incident.incident_date |date:"d.m.Y" }}</td>
                         <td><a href="/operrisk/incidents/{{ incident.id }}">{{ incident.name }}</a></td>
-                        <td>{{ incident.category_id }}</td>
+                        <td>{{ incident.category }}</td>
                         <td>{{ incident.loss_amount }}</td>
                         <td>{{ incident.get_status_display }}</td>
                     </tr>                                
