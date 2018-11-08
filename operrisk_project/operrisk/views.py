@@ -45,6 +45,8 @@ def show_incident(request,id):#shows the incident
         category = Category.objects.get(id=incident.category.id)
         context_dict['incident'] = incident
         context_dict['category'] = category
+        context_dict['DRAFT_STATUS'] = Incident.DRAFT_STATUS
+        context_dict['CREATED_STATUS'] = Incident.CREATED_STATUS
     except Incident.DoesNotExist:
         context_dict['incident'] = None
         context_dict['category'] = None
@@ -90,7 +92,7 @@ def export_incidents(request):#exports incidents to excel file
         row_num += 1
         ws.write(row_num,0,incident.incident_date,date_style)
         ws.write(row_num,1,incident.name)
-        ws.write(row_num,2,incident.status)
+        ws.write(row_num,2,incident.get_status_display())
         ws.write(row_num,3,incident.category.name)
         ws.write(row_num,4,incident.loss_amount,float_style)
         ws.write(row_num,5,incident.created_by.username)
@@ -111,7 +113,7 @@ def send_email_incident_added(inc_id,inc_name,inc_created_by,inc_url):#function 
 def edit_incident(request, id=None,template_name = ''):#view is used to add or edit incident
     if id:#incident already existing
         incident = get_object_or_404(Incident, pk=id)
-        if incident.status not in ('1',):#one can edit only incidents with status=Черновик
+        if incident.status not in (Incident.DRAFT_STATUS,):#one can edit only incidents with status=Черновик
             return redirect('show_incident',id=incident.id)
         template_name='operrisk/edit_incident.html'
     else:#new incident
@@ -123,7 +125,7 @@ def edit_incident(request, id=None,template_name = ''):#view is used to add or e
     if request.POST and form.is_valid():        
         instance = form.save(commit=False)        
         if id:#editing existing incident
-            instance.status = '2'#status=создан
+            instance.status = Incident.CREATED_STATUS#status=создан
             redirected_url='show_incident'
             inc_id = str(instance.id)
             inc_name = str(instance.name)
@@ -134,7 +136,7 @@ def edit_incident(request, id=None,template_name = ''):#view is used to add or e
             except:
                 pass
         else:#adding new incident
-            instance.status = '1'#status=черновик
+            instance.status = Incident.DRAFT_STATUS#status=черновик
             redirected_url = 'edit_incident'            
         form.save()
         return redirect(redirected_url,id=instance.id)
@@ -163,8 +165,8 @@ def list_users(request):#list of users
 def approve_incident(request,id=None):#approve incident
     if id:
         incident = get_object_or_404(Incident, pk=id)
-        if incident.status == '2':
-            incident.status = '3'#status=Утвержден
+        if incident.status == Incident.CREATED_STATUS:
+            incident.status = Incident.APPROVED_STATUS#status=Утвержден
             incident.save()
             response = HttpResponse()#redirect to show_incident
         else:
@@ -179,10 +181,9 @@ def approve_incident(request,id=None):#approve incident
 def cancel_incident(request,id=None):#cancel incident
     if id:
         incident = get_object_or_404(Incident, pk=id)
-        if incident.status == '2':
-            incident.status = '4'#status=Ошибка
-            incident.save()
-            response = HttpResponse()#redirect to show_incident
+        if incident.status == Incident.CREATED_STATUS:
+            incident.status = Incident.CANCELED_STATUS#status=Ошибка
+            incident.save()            
         else:
             return redirect('show_incident',id=id)
     else:

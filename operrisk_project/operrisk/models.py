@@ -38,19 +38,25 @@ class Subcategory(models.Model):#class for subcategory of incident
         return self.name        
 
 
+##################################################################################################
 
-class Incident(models.Model):#incident class
-    STATUSES = (
-            ('1', 'Черновик'),#incident.status for '1' #incident.get_status_display() for 'Черновик'
-            ('2', 'Создан'),
-            ('3', 'Утвержден'),
-            ('4', 'Помечен как ошибка'),
-        )
 
-    #sc = Subcategory.objects.get_or_create(name="Внутр. мошен. подкатегория 1")[0]        
+
+class Incident(models.Model):#incident class    
+    DRAFT_STATUS = '1'
+    CREATED_STATUS = '2'
+    APPROVED_STATUS = '3'
+    CANCELED_STATUS = '4'
+
+    INCIDENT_STATUSES = (
+                (DRAFT_STATUS, 'Черновик'),#incident.status for '1' #incident.get_status_display for 'Черновик'
+                (CREATED_STATUS, 'Создан'),
+                (APPROVED_STATUS, 'Утвержден'),
+                (CANCELED_STATUS, 'Помечен как ошибка'),
+            )
 
     name = models.CharField(max_length=256,null=False)
-    status = models.CharField(max_length=1,choices=STATUSES,blank=False,null=False,default='1')
+    status = models.CharField(max_length=1,choices=INCIDENT_STATUSES,blank=False,null=False,default=DRAFT_STATUS)
     category = models.ForeignKey(Category,on_delete=models.PROTECT)
     subcategory = models.ForeignKey(Subcategory,on_delete=models.PROTECT)
     incident_date = models.DateField(null=False,default=datetime.date.today())
@@ -60,7 +66,6 @@ class Incident(models.Model):#incident class
     att = models.FileField(null=True,blank=True,upload_to='files_att/')
     created_by = models.ForeignKey(User,on_delete=models.PROTECT,null=True)
     created_date = models.DateTimeField(auto_now_add=True,null=True)
-
 
     def save(self, *args, **kwargs):        
         if self.loss_amount < 0:#loss_amount should not be less than 0
