@@ -169,33 +169,17 @@ LDAP_AUTH_SEARCH_BASE = "dc=amanat,dc=local"
 LDAP_AUTH_CONNECTION_USERNAME = read_key('LDAP_AUTH_CONNECTION_USERNAME')
 LDAP_AUTH_CONNECTION_PASSWORD = read_key('LDAP_AUTH_CONNECTION_PASSWORD')
 LDAP_AUTH_FORMAT_USERNAME = "django_python3_ldap.utils.format_username_active_directory"
+LDAP_AUTH_ACTIVE_DIRECTORY_DOMAIN = "amanat"
+
 LDAP_AUTH_USER_FIELDS = {
-    "username": "mail",#"sAMAccountName"
-    #"first_name": "givenName",
-    #"last_name": "sn",
+    "username": "sAMAccountName",#sAMAccountName
+    "first_name": "givenName",
+    "last_name": "sn",
     "email": "mail",
 }
 
 LDAP_AUTH_OBJECT_CLASS = "user"
 
-#the section below enables logging and prints errors to console
-"""
-LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "handlers": {
-        "console": {
-            "class": "logging.StreamHandler",
-        },
-    },
-    "loggers": {
-        "django_python3_ldap": {
-            "handlers": ["console"],
-            "level": "INFO",
-        },
-    },
-}
-"""
 #settings for EXCHANGE server - see module emailing.py
 EXCHANGE_USERNAME = read_key('EXCHANGE_USERNAME')
 EXCHANGE_PASSWORD = read_key('EXCHANGE_PASSWORD')

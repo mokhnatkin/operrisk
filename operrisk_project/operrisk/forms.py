@@ -2,7 +2,14 @@ from django import forms
 from operrisk.models import Incident, Category, Subcategory
 import datetime
 
+"""
+class CategorySelectForm(forms.ModelForm):#the form to select category in order to display proper list of subcategories when creating incident
+    categories = Category.objects.all()
 
+    class Meta:
+        model = Category
+        fields = ('name',)
+"""
 
 class IncidentForm(forms.ModelForm):#the form to create an incident    
     cur_year = datetime.datetime.today().year

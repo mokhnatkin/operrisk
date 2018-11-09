@@ -3,9 +3,6 @@ import django_filters
 from django_filters import DateFilter, CharFilter, NumberFilter, ModelChoiceFilter, ChoiceFilter
 
 
-
-
-
 class IncidentFilter(django_filters.FilterSet):
     categories = Category.objects.all()
     statuses = Incident.INCIDENT_STATUSES
