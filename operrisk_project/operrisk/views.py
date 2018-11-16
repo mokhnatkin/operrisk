@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.http import HttpResponse
-from operrisk.models import Category, Incident
+from operrisk.models import Category, Incident, Subcategory
 from operrisk.forms import IncidentForm
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
@@ -17,7 +17,8 @@ from operrisk.emailing import send_email
 def index (request):#home page
     incidents = Incident.objects.order_by('-created_date')[:5] #5 last incidents
     categories = Category.objects.order_by('name')#list of all categories
-    context_dict={'incidents':incidents,'categories':categories}
+    subcategories = Subcategory.objects.all()#list of all subcategories
+    context_dict={'incidents':incidents,'categories':categories,'subcategories':subcategories}
     return render(request, 'operrisk/index.html',context=context_dict)
 
 
@@ -27,13 +28,28 @@ def show_category(request,category_URL_name):#shows the category w/ list of inci
     context_dict = {}
     try:
         category = Category.objects.get(URL_name=category_URL_name)
-        incidents = Incident.objects.filter(category=category)
+        incidents = Incident.objects.filter(category=category).order_by('-id')
         context_dict['incidents'] = incidents
         context_dict['category'] = category
     except Category.DoesNotExist:
         context_dict['incidents'] = None
         context_dict['category'] = None
     return render(request,'operrisk/category.html',context_dict)
+
+
+@login_required
+@permission_required('operrisk.view_category',raise_exception=True)
+def show_subcategory(request,subcategory_URL_name):#shows the category w/ list of incidents
+    context_dict = {}
+    try:
+        subcategory = Subcategory.objects.get(URL_name=subcategory_URL_name)
+        incidents = Incident.objects.filter(subcategory=subcategory).order_by('-id')
+        context_dict['incidents'] = incidents
+        context_dict['subcategory'] = subcategory
+    except Subcategory.DoesNotExist:
+        context_dict['incidents'] = None
+        context_dict['subcategory'] = None
+    return render(request,'operrisk/subcategory.html',context_dict)
 
 
 @login_required
@@ -56,7 +72,7 @@ def show_incident(request,id):#shows the incident
 @login_required
 @permission_required('operrisk.view_incident',raise_exception=True)
 def show_all_incidents_p(request):#shows the list of all incidents (paginated)
-    incident_list = Incident.objects.order_by('id')
+    incident_list = Incident.objects.order_by('-id')
     paginator = Paginator(incident_list, 25) # number of objects per page
     page = request.GET.get('page')
     incidents = paginator.get_page(page)
@@ -66,7 +82,7 @@ def show_all_incidents_p(request):#shows the list of all incidents (paginated)
 @login_required
 @permission_required('operrisk.view_incident',raise_exception=True)
 def show_all_incidents_f(request):#shows the list of all incidents and a filter to find the incident
-    f = IncidentFilter(request.GET,queryset=Incident.objects.all())
+    f = IncidentFilter(request.GET,queryset=Incident.objects.order_by('-id'))
     return render(request, 'operrisk/all_incidents_f.html',{'filter':f})
 
 
@@ -84,18 +100,22 @@ def export_incidents(request):#exports incidents to excel file
     date_style.num_format_str='DD.MM.YYYY'#set format for incident_date
     float_style = xlwt.XFStyle()
     float_style.num_format_str='#,##0'#set format for loss_amount
-    columns = ['дата инцидента', 'название', 'статус', 'категория', 'ущерб', 'кем создан', ]      
+    columns = ['ID', 'дата начала инцидента', 'дата окончания инцидента', 'дата отражения на балансе','название', 'статус', 'категория', 'причина', 'ущерб', 'кем создан', ]      
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], header_style)
-    incidents = Incident.objects.all()
+    incidents = Incident.objects.order_by('-id')
     for incident in incidents:
         row_num += 1
-        ws.write(row_num,0,incident.incident_date,date_style)
-        ws.write(row_num,1,incident.name)
-        ws.write(row_num,2,incident.get_status_display())
-        ws.write(row_num,3,incident.category.name)
-        ws.write(row_num,4,incident.loss_amount,float_style)
-        ws.write(row_num,5,incident.created_by.username)
+        ws.write(row_num,0,incident.id)
+        ws.write(row_num,1,incident.incident_date,date_style)
+        ws.write(row_num,2,incident.incident_end_date,date_style)
+        ws.write(row_num,3,incident.incident_balance_date,date_style)
+        ws.write(row_num,4,incident.name)
+        ws.write(row_num,5,incident.get_status_display())
+        ws.write(row_num,6,incident.category.name)
+        ws.write(row_num,7,incident.subcategory.name)
+        ws.write(row_num,8,incident.loss_amount,float_style)
+        ws.write(row_num,9,incident.created_by.username)        
     wb.save(response)
     return response
 
@@ -134,6 +154,7 @@ def edit_incident(request, id=None,template_name = ''):#view is used to add or e
             try:
                 send_email_incident_added(inc_id,inc_name,inc_created_by,inc_url)#send email to all RMs
             except:
+                print('incident created; email notification not sent')
                 pass
         else:#adding new incident
             instance.status = Incident.DRAFT_STATUS#status=черновик
@@ -143,11 +164,12 @@ def edit_incident(request, id=None,template_name = ''):#view is used to add or e
 
     return render(request, template_name, {'form': form})
 
+
 @login_required
 @permission_required('operrisk.add_incident',raise_exception=True)
 def show_my_incidents(request):#shows the list of all incidents added by current user
     current_user = request.user
-    incidents = Incident.objects.all().filter(created_by=current_user)
+    incidents = Incident.objects.all().filter(created_by=current_user).order_by('-id')
     context_dict = {'current_user':current_user,'incidents':incidents}
     return render(request, 'operrisk/my_incidents.html',context=context_dict)
 
@@ -168,7 +190,7 @@ def approve_incident(request,id=None):#approve incident
         if incident.status == Incident.CREATED_STATUS:
             incident.status = Incident.APPROVED_STATUS#status=Утвержден
             incident.save()
-            response = HttpResponse()#redirect to show_incident
+            #response = HttpResponse()#redirect to show_incident
         else:
             return redirect('show_incident',id=id)
     else:

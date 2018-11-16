@@ -40,7 +40,7 @@ SECRET_KEY = read_key('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['ngrok.io','localhost','127.0.0.1','a62fb173.ngrok.io',]
+ALLOWED_HOSTS = ['ngrok.io','localhost','127.0.0.1','1ebfca3e.ngrok.io',]
 
 
 # Application definition
@@ -94,14 +94,7 @@ WSGI_APPLICATION = 'operrisk_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
-"""sqLite
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
-"""
+
 #mySQL
 DB_USER = read_key('DB_USER')
 DB_PASSWORD = read_key('DB_PASSWORD')
@@ -164,7 +157,7 @@ LOGIN_URL = '/accounts/login/'
 
 #settings for django-python3-ldap
 AUTHENTICATION_BACKENDS = ('django_python3_ldap.auth.LDAPBackend',)
-LDAP_AUTH_URL = read_key('LDAP_AUTH_URL')#88.204.147.90
+LDAP_AUTH_URL = read_key('LDAP_AUTH_URL')
 LDAP_AUTH_SEARCH_BASE = "dc=amanat,dc=local"
 LDAP_AUTH_CONNECTION_USERNAME = read_key('LDAP_AUTH_CONNECTION_USERNAME')
 LDAP_AUTH_CONNECTION_PASSWORD = read_key('LDAP_AUTH_CONNECTION_PASSWORD')
@@ -172,7 +165,7 @@ LDAP_AUTH_FORMAT_USERNAME = "django_python3_ldap.utils.format_username_active_di
 LDAP_AUTH_ACTIVE_DIRECTORY_DOMAIN = "amanat"
 
 LDAP_AUTH_USER_FIELDS = {
-    "username": "sAMAccountName",#sAMAccountName
+    "username": "sAMAccountName",
     "first_name": "givenName",
     "last_name": "sn",
     "email": "mail",

@@ -11,9 +11,13 @@
                 <div class="table-responsive">
                     <table class="table">
                         <tr>
+                            <td><strong>ID</strong></td>
+                            <td>{{ incident.id }}</td>
+                        </tr>                        
+                        <tr>
                             <td><strong>Название</strong></td>
                             <td>{{ incident.name }}</td>
-                        </tr>                        
+                        </tr>
                         <tr>
                             <td><strong>Статус</strong></td>
                             <td>{{ incident.get_status_display }}</td>
@@ -23,8 +27,20 @@
                             <td><a href="{% url 'show_category' category.URL_name %}">{{ incident.category }}</a></td>
                         </tr>
                         <tr>
-                            <td><strong>Дата инцидента</strong></td>
+                            <td><strong>Причина</strong></td>
+                            <td>{{ incident.subcategory }}</td>
+                        </tr>                        
+                        <tr>
+                            <td><strong>Дата начала инцидента</strong></td>
                             <td>{{ incident.incident_date |date:"d.m.Y" }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Дата окончания инцидента</strong></td>
+                            <td>{{ incident.incident_end_date |date:"d.m.Y" }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Дата отражения на балансе</strong></td>
+                            <td>{{ incident.incident_balance_date |date:"d.m.Y" }}</td>
                         </tr>
                         <tr>
                             <td><strong>Описание инцидента</strong></td>
@@ -32,7 +48,7 @@
                         </tr>
                         <tr>
                             <td><strong>Размер ущерба</strong></td>
-                            <td>{{ incident.loss_amount }}</td>
+                            <td>{{ incident.loss_amount |floatformat:0 }}</td>
                         </tr>
                         <tr>
                             <td><strong>Предпринятые меры</strong></td>
@@ -42,6 +58,10 @@
                             <td><strong>Вложенные файлы</strong></td>
                             <td><a href="/media/{{ incident.att }}">{{ incident.att }}</a></td>
                         </tr>
+                        <tr>
+                                <td><strong>Комментарий</strong></td>
+                                <td>{{ incident.comment }}</td>
+                            </tr>                        
                         <tr>
                             <td><strong>Создано пользователем</strong></td>
                             <td>{{ incident.created_by }}</td>

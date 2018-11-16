@@ -18,19 +18,23 @@
                 <table class="table">
                     <tr>
                         <th>ID</th>
-                        <th>Дата-время инцидента</th>
+                        <th>Дата начала инцидента</th>
+                        <th>Дата окончания инцидента</th>
                         <th>Название</th>
                         <th>Категория</th>
+                        <th>Причина</th>
                         <th>Ущерб</th>
                         <th>Статус</th>
                     </tr>
                     {% for incident in filter.qs %}
                     <tr>
-                        <td>{{ incident.id }}</td>
+                        <td><a href="/operrisk/incidents/{{ incident.id }}">{{ incident.id }}</a></td>
                         <td>{{ incident.incident_date |date:"d.m.Y" }}</td>
+                        <td>{{ incident.incident_end_date |date:"d.m.Y" }}</td>
                         <td><a href="/operrisk/incidents/{{ incident.id }}">{{ incident.name }}</a></td>
                         <td>{{ incident.category }}</td>
-                        <td>{{ incident.loss_amount }}</td>
+                        <td>{{ incident.subcategory }}</td>
+                        <td>{{ incident.loss_amount |floatformat:0 }}</td>
                         <td>{{ incident.get_status_display }}</td>
                     </tr>                                
                     {% endfor %}

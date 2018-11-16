@@ -26,17 +26,26 @@
         <div>
             {% if perms.operrisk.view_category %}
                 {% if categories %}
-                <h3>Категории опер. рисков</h3>
+                <h3>Категории операционных рисков</h3>
                 <ul>
                     {% for cat in categories %}
                     <li>
                         <a href="{% url 'show_category' cat.URL_name %}">{{ cat.name }}</a>                                      
                     </li>
+                    <ul>
+                        {% for subcat in subcategories %}
+                            {% if subcat.category == cat %}
+                                <li>
+                                    <a href="{% url 'show_subcategory' subcat.URL_name %}">{{ subcat.name }}</a>                                      
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                        </ul>                    
                     {% endfor %}
                 </ul>
                 {% else %}
                 <strong>Справочник категорий ещё не заполнен</strong>
                 {% endif %}
             {% endif %}
-        </div>
+        </div>       
     {% endblock %}

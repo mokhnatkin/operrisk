@@ -6,10 +6,10 @@
 
     {% block body_block %}
         <div>            
-            {% if category %}
-                <h3>{{ category.name }}</h3>
+            {% if subcategory %}
+                <h3>{{ subcategory.name }}</h3>
             {% else %}
-                <strong>Такой категории нет в базе</strong>
+                <strong>Такой причины нет в базе</strong>
             {% endif %}
         </div>
         <div>
@@ -21,8 +21,7 @@
                             <th>ID</th>
                             <th>Дата начала инцидента</th>
                             <th>Дата окончания инцидента</th>                            
-                            <th>Название</th>
-                            <th>Причина</th>
+                            <th>Название</th>                            
                             <th>Ущерб</th>
                             <th>Кем создан</th>
                             <th>Статус</th>
@@ -32,8 +31,7 @@
                             <td><a href="/operrisk/incidents/{{ incident.id }}">{{ incident.id }}</a></td>
                             <td>{{ incident.incident_date |date:"d.m.Y" }}</td>
                             <td>{{ incident.incident_end_date |date:"d.m.Y" }}</td>                            
-                            <td><a href="/operrisk/incidents/{{ incident.id }}">{{ incident.name }}</a></td>
-                            <td>{{ incident.subcategory }}</td>
+                            <td><a href="/operrisk/incidents/{{ incident.id }}">{{ incident.name }}</a></td>                            
                             <td>{{ incident.loss_amount |floatformat:0 }}</td>
                             <td>{{ incident.created_by }}</td>
                             <td>{{ incident.get_status_display }}</td>
@@ -42,7 +40,7 @@
                     </table>
                 </div>
             {% else %}
-            <strong>В данной категории пока нет инцидентов</strong>
+            <strong>Пока нет инцидентов, относящихся к данной причине</strong>
             {% endif %}
         </div>
     {% endblock %}
